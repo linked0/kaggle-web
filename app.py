@@ -8,7 +8,7 @@ import numpy as np
 # import HashingVectorizer from local dir
 from vectorizer import vect
 
-app = Flask(__name__)
+app = Flask(__name__) # app = Flask(__name__, template_folder='../pages/templates') 폴더를 다른 곳을 지정할때 참고
 
 
 ##### Preparing the Classifier
@@ -73,6 +73,10 @@ def feedback():
     train(review, y)
     sqlite_entry(db, review, y)
     return render_template('thanks.html')
+
+@app.route('/examples')
+def examples():
+    return render_template('examples/index.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
