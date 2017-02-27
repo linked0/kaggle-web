@@ -1,6 +1,16 @@
-from examples.pyqt.PenPropertiesDlg import *
+import sys
+import os
+import logging as log
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
+
 from ml_algs import model_data as mdata
 from common import config
+import ml_algs.model_data as mdata
+import common.strings as strs
+import common.config as config
+import common.utils as utils
 
 log.basicConfig(format=strs.log_format, level=log.DEBUG, stream=sys.stderr)
 

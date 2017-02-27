@@ -78,5 +78,9 @@ def feedback():
 def examples():
     return render_template('examples/index.html')
 
+@app.route('/ml')
+def machine_learning():
+    return render_template('ml/index.html')
+
 if __name__ == '__main__':
     app.run(debug=True)
