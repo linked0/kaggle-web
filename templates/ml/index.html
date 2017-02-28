@@ -6,15 +6,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Machine Learning</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-  </head>
-  <body>
-        <h1>Hello World!</h1>
-        <script src="{{url_for('static', filename='js/jquery.js')}}"></script>
-        <script src="{{url_for('static', filename='js/bootstrap.js')}}"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col1">
+                <h4>Column 1</h4>
+            </div>
+            <div class="col-xs-12 col-sm-6 col2">
+                <h4>Column 2</h4>
+            </div>
+        </div>
+    </div>
+    <script src="{{url_for('static', filename='js/jquery.js')}}"></script>
+    <script src="{{url_for('static', filename='js/bootstrap.js')}}"></script>
   </body>
 </html>
