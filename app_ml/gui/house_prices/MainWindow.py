@@ -17,6 +17,8 @@ from gui.house_prices.TrainCentral import CentralWidgetTrainProcess
 import common.control_view
 import common.strings as strs
 
+from preprocess_data import preprocess as prep
+
 log.basicConfig(format=strs.log_format,level=log.DEBUG,stream=sys.stderr)
 
 class MainWindow(QMainWindow):
@@ -28,6 +30,9 @@ class MainWindow(QMainWindow):
 
         self.setWindowTitle('Training Machine')
         self.tabwidget = QTabWidget()
+
+        # set data store
+        prep.set_data_name(prep.data_house_prices)
 
         # set for training model
         self.trainProcessView = CentralWidgetTrainProcess()

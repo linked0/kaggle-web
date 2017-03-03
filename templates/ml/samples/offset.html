@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Offset</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+<!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+  <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+</head>
+
+<body>
+<div class="row">
+    <div class="col-xs-6 col-xs-offset-3 col1">
+        <h1>Hello Learnable!</h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xs-9 col-xs-push-3">
+        <h1>Pushed Column</h1>
+    </div>
+    <div class="col-xs-3 col-xs-pull-9">
+        <h1>Pulled Column</h1>
+    </div>
+</div>
+</body>
+</html>

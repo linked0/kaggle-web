@@ -25,13 +25,7 @@ class PreprocessSettingView(QDockWidget):
         self.X, self.y = prep.data_store.get_original_data()
         self.central_view.set_data(self.X, self.y)
         self.columns = self.X.columns.tolist()
-        for idx in range(len(self.columns)):
-            combo = QComboBox()
-            combo.addItems(self.columns + ['None'])
-            combo.setCurrentIndex(len(self.columns))
-            combo.currentTextChanged.connect(partial(self.on_combo_changed, idx))
-            layout.addWidget(combo)
-            self.combos.append(combo)
+
 
     def showEvent(self, event):
         pass

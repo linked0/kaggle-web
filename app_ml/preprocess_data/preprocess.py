@@ -4,8 +4,9 @@ from sklearn.cross_validation import train_test_split
 import sys
 import logging as log
 import common.strings as strs
-from kaggle_data import KaggleData
-from mnist_data import MnistData
+from preprocess_data.kaggle_data import KaggleData
+from preprocess_data.mnist_data import MnistData
+from preprocess_data.kaggle_house_prices import KaggleHousePrices
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.preprocessing import StandardScaler
 
@@ -63,6 +64,8 @@ def create_data_store(force_process=False):
             ds = KaggleData()
         elif data_store_name == data_mnist:
             ds = MnistData()
+        elif data_store_name == data_house_prices:
+            ds = KaggleHousePrices()
         else:
             log.debug('data store is not created because of name mismatch')
         data_store = ds
