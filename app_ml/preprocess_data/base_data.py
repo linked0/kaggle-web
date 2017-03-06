@@ -47,9 +47,33 @@ class BaseData(object):
     def set_columns(self, columns):
         self.train_data_columns = columns
 
+    def set_column_names(self, columns):
+        log.debug('columns:%s' % columns)
+        self.set_columns(columns)
+
+    def set_label_name(self, label):
+        log.debug('label:%s' % label)
+        self.label = label
+
     def set_data_file(self, path):
         log.debug('start')
         self.data_file = path
+
+    def view_head(self):
+        log.debug('start')
+        with open(self.data_file) as f:
+            for i in range(1, 6):
+                print("LINE %d=== \n%s" % (i, f.readline()))
+
+        log.debug('end')
+
+    # deprecated
+    def load_data(self):
+        log.debug('start')
+
+    def load_data2(self):
+        self.init()
+        self.loaded_data = pd.read_csv(self.data_file)
 
     def preprocess_data(self):
         # if self.cur_dimen_reduct_method != mdata.get_dimem_reduct_method():

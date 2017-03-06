@@ -43,7 +43,7 @@ error_no_object_for_algorithm_name = "No object for algorithm name"
 error_obj_null = 'Object is NoneType'
 
 # code config
-log_format = '%(filename)s:%(lineno)d:%(funcName)s:\t%(message)s'
+log_format = '>>>>>> %(filename)s:%(lineno)d:%(funcName)s:\t%(message)s'
 
 
 # button
