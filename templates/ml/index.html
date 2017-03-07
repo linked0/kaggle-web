@@ -16,44 +16,100 @@
 
 <body>
 <div class="container">
-    <div class="row">
-        <div class="col-md-12 text-center">
-            <h1>My First Bootstrap Blog</h1>
+    <div class="page-header">
+        <h1>ML <small>Training Model and Predict!</small></h1>
+    </div>
+
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#">Training</a></li>
+        <li><a href="#">Activity</a></li>
+        <li><a href="#">Liked Pages</a></li>
+    </ul>
+
+    <div class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#mynavbar-content">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">SitePoint</a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="mynavbar-content">
+                <ul class="nav navbar-nav">
+                    <li><a href="#">Home</a></li>
+                    <li class="active dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Board of Members</a></li>
+                            <li><a href="#">Developers Team</a></li>
+                            <li><a href="#">Designing Team</a></li>
+                            <li class="divider"></li>
+                            <li><a href="#">Investors</a></li>
+                            <li><a href="#">Share holders</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">Pricing</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="#">Feedback</a></li>
+                </ul>
+            </div>
         </div>
     </div>
 
-    <hr>
+    <ol class="breadcrumb">
+      <li><a href="#">Home</a></li>
+      <li><a href="#">About</a></li>
+      <li class="active">Author</li>
+    </ol>
 
-    <div class="row">
-        <div class="col-md-4 col-sm-6 col-xs-12">
-            <h3>Post Title 1</h3>
-            <p>Lorem ipsum dolor sit amet ... </p>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            ATTENTION
         </div>
-        <div class="col-md-4 col-sm-6 col-xs-12">
-            <h3>Post Title 2</h3>
-            <p>Lorem ipsum dolor sit amet ... </p>
+        <div class="penel-body">
+            Lorem ipsum dolor sit ametnim ..........
         </div>
-        <div class="col-md-4 col-sm-6 col-xs-12">
-            <h3>Post Title 3</h3>
-            <p>Lorem ipsum dolor sit amet ... </p>
-        </div>
-        <div class="col-md-4 col-sm-6 col-xs-12">
-            <h3>Post Title 4</h3>
-            <p>Lorem ipsum dolor sit amet ... </p>
-        </div>
-        <div class="col-md-4 col-sm-6 col-xs-12">
-            <h3>Post Title 5</h3>
-            <p>Lorem ipsum dolor sit amet ... </p>
-        </div>
-        <div class="col-md-4 col-sm-6 col-xs-12">
-            <h3>Post Title 6</h3>
-            <p>Lorem ipsum dolor sit amet ... </p>
+        <div class="panel-footer">
+            <a href="#" class="btn btn-danger btn-sm">Agree</a>
+            <a href="#" class="btn btn-default btn-sm">Decline</a>
         </div>
     </div>
+
+    <div class="media">
+        <a class="pull-left thumnail" href="#">
+            <img class="media-object" src="{{ url_for('static', filename='images/N.png') }}" alt="Syed Fazle Rahman">
+            <div class="caption">
+                <h4>Caption Goes Here~</h4>
+            </div>
+        </a>
+        <div class="media-body">
+            <h4 class="media-heading">Awesome piece of work!</h4>
+            <p>Lorem ipsum dolor sit amet, consectetur ...</p>
+        </div>
+    </div>
+
+    <ul class="list-group">
+        <li class="list-group-item list-group-item-success">Inbox <span class="badge">14</span></li>
+        <li class="list-group-item list-group-item-danger">Sent</li>
+        <li class="list-group-item">Drafts</li>
+        <li class="list-group-item">Deleted</li>
+        <li class="list-group-item">Spam</li>
+    </ul>
+
+    <div class="list-group">
+       <a href="#" class="list-group-item">
+           <h4 class="list-group-item-heading">Item heading</h4>
+           <p class="list-group-item-text">Lorem ipsum dolor sit ...</p>
+       </a>
+    </div>
+
+    <a href="/ml/nested">Nested</a><br>
+    <a href="/ml/samples/offset">Offset</a><br>
 </div>
 
-<a href="/ml/nested">Nested</a><br>
-<a href="/ml/samples/offset">Offset</a><br>
 <script src="{{url_for('static', filename='js/jquery.js')}}"></script>
 <script src="{{url_for('static', filename='js/bootstrap.js')}}"></script>
 </body>
