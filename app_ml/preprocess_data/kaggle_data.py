@@ -14,7 +14,7 @@ unseen_data_file = './data/test.csv'
 prediction_file = './data/kaggle.csv'
 categorical_columns = ['Pclass', 'Embarked']
 family_column = 'Family'
-
+column_names = ['Pclass', 'Sex', 'Age', 'SibSp', 'Parch', 'Fare', 'Embarked']
 # hj-comment: move load_data, process_missing_data, convert_to_numeric functions to parent class
 
 
@@ -23,7 +23,7 @@ class KaggleData(BaseData):
         super(KaggleData, self).__init__()
         self.data_name = 'kaggle'
         self.data_file = './data/train.csv'
-        self.train_data_columns = ['Pclass', 'Sex', 'Age', 'SibSp', 'Parch', 'Fare', 'Embarked']
+        self.column_names = ['Pclass', 'Sex', 'Age', 'SibSp', 'Parch', 'Fare', 'Embarked']
         log.debug('start')
 
     def load_data(self):
@@ -32,8 +32,8 @@ class KaggleData(BaseData):
 
     def set_features(self, features):
         log.debug('>>>>> - featuers: {0}'.format(features))
-        global train_data_columns
-        train_data_columns = features
+        global column_names
+        column_names = features
 
     def preprocess_data(self, force_process=False):
         log.debug('>>>>> start')
@@ -105,7 +105,7 @@ class KaggleData(BaseData):
 
     def load_unseen_data(self, fileame):
         self.titanic_unseen = pd.read_csv(fileame)
-        X_temp = self.titanic_unseen[train_data_columns]
+        X_temp = self.titanic_unseen[column_names]
         log.debug('test data:\n{0}'.format(X_temp.head(5)))
         log.debug('features: {0}'.format(X_temp.columns))
         return X_temp
@@ -113,15 +113,15 @@ class KaggleData(BaseData):
     def process_missing_data(self, X):
         self.check_missing_data(X)
 
-        if 'Age' in self.train_data_columns:
+        if 'Age' in self.column_names:
             log.debug("process missing data for Age")
             X.loc[:, 'Age'] = X["Age"].fillna(X["Age"].median())
 
-        if 'Embarked' in self.train_data_columns:
+        if 'Embarked' in self.column_names:
             log.debug("process missing data for Embarked")
             X.loc[:, 'Embarked'] = X['Embarked'].fillna('S')
 
-        if 'Fare' in self.train_data_columns and 'Pclass' in self.train_data_columns:
+        if 'Fare' in self.column_names and 'Pclass' in self.column_names:
             log.debug("process missing data for Fare")
             # nullfares = X[X.Fare == 0]
             nullfares = X[(X.Fare == 0) | (X.Fare.isnull())]
@@ -150,16 +150,16 @@ class KaggleData(BaseData):
                 log.debug("%s(object): # of null: %d" % (col, X[col].isnull().sum()))
 
     def convert_data_type(self, X):
-        if 'Sex' in self.train_data_columns:
+        if 'Sex' in self.column_names:
             log.debug("convert Sex data to integer")
             sex_mapping = {'male': 0, 'female': 1}
             X.loc[:, 'Sex'] = X['Sex'].map(sex_mapping)
 
-        if 'Pclass' in self.train_data_columns:
+        if 'Pclass' in self.column_names:
             log.debug('convert Pclass data to str')
             X.Pclass = X.Pclass.astype(str)
 
-        # if 'Embarked' in train_data_columns:
+        # if 'Embarked' in column_names:
         #     log.debug("convert Embarked data to integer")
         #     # embarked_mapping = {label:idx for idx, label in enumerate(np.unique(X['Embarked']))}
         #     embarked_mapping = {'S':0, 'C':1, 'Q':2}
@@ -183,7 +183,7 @@ class KaggleData(BaseData):
         log.debug('X shape: %s' % (X.shape,))
         log.debug('X info:{0}'.format(X.info()))
         log.debug('type(X):{0}'.format(type(X)))
-        cat_list = self.get_categorical_name_list(X, self.train_data_columns)
+        cat_list = self.get_categorical_name_list(X, self.column_names)
         self.save_temp_data(X)
         dummies = pd.get_dummies(X[cat_list])
         X = pd.concat([X, dummies], axis=1)
@@ -196,10 +196,10 @@ class KaggleData(BaseData):
     def get_categorical_list(X):
         log.debug('should be implemented completely')
         col_indices = []
-        for index in range(len(train_data_columns)):
-            if train_data_columns[index] in categorical_columns:
+        for index in range(len(column_names)):
+            if column_names[index] in categorical_columns:
                 col_indices.append(index)
-        log.debug('columns:{0}'.format(train_data_columns))
+        log.debug('columns:{0}'.format(column_names))
         log.debug('indices:{0}'.format(col_indices))
         return col_indices
 

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # main menu
 main_menu_train = 'Train'
 main_menu_example = 'Examples'
@@ -41,6 +42,8 @@ title_feature_extraction = "Feature Extraction"
 error_hyper_param_not_selected = '@@@ Hyperparameter not selected'
 error_no_object_for_algorithm_name = "No object for algorithm name"
 error_obj_null = 'Object is NoneType'
+error_columns_not_defined = '컬럼 이름이 지정되지 않음(None)'
+error_no_data = '데이터가 로드되지 않았음'
 
 # code config
 log_format = '>>>>>> %(filename)s:%(lineno)d:%(funcName)s:\t%(message)s'

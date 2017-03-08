@@ -44,7 +44,7 @@ if __name__ == '__main__':
     mdata.set_algorithm_obj(mdata.alg_ensemble_adaboost,
                             AlgEnsemble(mdata.alg_ensemble_adaboost))
 
-    window = housem.MainWindow()
+    window = mlm.MainWindow()
     window.show()
     window.raise_()
 

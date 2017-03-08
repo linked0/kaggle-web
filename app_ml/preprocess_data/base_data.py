@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import sys
 import logging as log
 import common.strings as strs
@@ -14,7 +16,7 @@ class BaseData(object):
         log.debug('start')
         self.data_name = None
         self.data_file = None
-        self.train_data_columns = None
+        self.column_names = None
         self.X = None
         self.y = None
         self.org_X = None
@@ -26,10 +28,14 @@ class BaseData(object):
         self.X_test = None
         self.y_test = None
         self.loaded_data = None
+        self.null_indices = {}
         self.preprocessed = False
         self.cur_dimen_reduct_method = const.param_none
 
     def init(self):
+        self.data_name = None
+        self.data_file = None
+        self.column_names = None
         self.X = None
         self.y = None
         self.org_X = None
@@ -41,11 +47,12 @@ class BaseData(object):
         self.X_test = None
         self.y_test = None
         self.loaded_data = None
+        self.null_indices = {}
         self.preprocessed = False
         self.cur_dimen_reduct_method = const.param_none
 
     def set_columns(self, columns):
-        self.train_data_columns = columns
+        self.column_names = columns
 
     def set_column_names(self, columns):
         log.debug('columns:%s' % columns)
@@ -56,6 +63,7 @@ class BaseData(object):
         self.label = label
 
     def set_data_file(self, path):
+        self.init()
         log.debug('start')
         self.data_file = path
 
@@ -64,16 +72,43 @@ class BaseData(object):
         with open(self.data_file) as f:
             for i in range(1, 6):
                 print("LINE %d=== \n%s" % (i, f.readline()))
-
         log.debug('end')
 
-    # deprecated
+    # hj-deprecated
     def load_data(self):
         log.debug('start')
 
     def load_data2(self):
-        self.init()
+        # hj-comment: 대용량 파일을 읽어올 때 어떻게 할지 고민을 해야함
         self.loaded_data = pd.read_csv(self.data_file)
+
+    def get_data(self):
+        return self.loaded_data
+
+    def _check_basic_data(self):
+        if self.column_names is None:
+            log.debug("ERROR:%s" % strs.error_columns_not_defined)
+            return False
+
+        if self.loaded_data  is None:
+            log.debug("ERROR:%s" % strs.error_no_data)
+            return False
+
+        return True
+
+    def desc(self):
+        log.debug('start')
+        if self._check_basic_data() is False:
+            return
+
+        # check missing data
+        for col in self.column_names:
+            na_sum = self.loaded_data[col].isnull()
+            log.debug('%s(%d): %d' % (col, self.loaded_data.size, na_sum.size))
+            self.null_indices.setdefault(col, [])
+
+    def split_data(self):
+        log.debug('not implemented')
 
     def preprocess_data(self):
         # if self.cur_dimen_reduct_method != mdata.get_dimem_reduct_method():
@@ -194,8 +229,8 @@ class BaseData(object):
 
     def load_train_data(self):
         self.loaded_data = pd.read_csv(self.data_file)
-        log.debug('##### specified data columns: %s' % self.train_data_columns)
-        X = self.loaded_data[self.train_data_columns]
+        log.debug('##### specified data columns: %s' % self.column_names)
+        X = self.loaded_data[self.column_names]
         y = self.loaded_data['Survived']
         log.debug('test data: \n{0}'.format(X.head(10)))
         return X, y
