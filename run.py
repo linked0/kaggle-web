@@ -82,10 +82,6 @@ def examples():
 def machine_learning():
     return render_template('ml/index.html')
 
-@app.route('/ml/nested')
-def ml_nested():
-    return render_template('ml/nested.html')
-
 @app.route('/ml/samples/offset')
 def ml_sample_nested():
     return render_template('ml/samples/offset.html')

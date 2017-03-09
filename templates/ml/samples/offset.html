@@ -1,19 +1,185 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Offset</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-<!--[if lt IE 9]>
-  <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-  <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-<![endif]-->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Machine Learning</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
 </head>
 
 <body>
+<div class="container">
+    <div class="page-header">
+        <h1><span class="glyphicon glyphicon-search" aria-hidden="true"></span>ML
+            <small><span class="glyphicon glyphicon-heart text-danger" aria-hidden="true"></span> Training Model and Predict!</small></h1>
+    </div>
+
+    <div class="form-group has-error">
+        <label class="control-label" for="inputField">Input with error</label>
+        <input type="text" class="form-control" id="inputField">
+    </div>
+
+    <div class="container">
+        <input class="form-control input-lg" type="text" placeholder="Larger Input Field">
+        <input class="form-control" type="text" placeholder="Default Input Field">
+        <input class="form-control input-sm" type="text" placeholder="Smaller Input Field">
+
+        <input class="form-control" type="text" placeholder="Disabled input here..." disabled>
+    </div>
+
+    <div class="container well well-sm">
+        <form class="form-inline">
+            <div class="form-group">
+                <input type="email" class="form-control" id="emailField" placeholder="Enter email">
+            </div>
+            <div class="form-group">
+                <input type="password" class="form-control" id="passwordField" placeholder="Password">
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox"> Remember me
+                </label>
+            </div>
+            <div class="radio">
+                <label>
+                    <input type="radio" value="Male"> Male
+                </label>
+            </div>
+            <button type="submit" class="btn btn-primary">Sign in</button>
+        </form>
+    </div>
+
+    <div class="container">
+    <h3>form-horizontal class</h3>
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label for="nameField">Name</label>
+            <input type="text" class="form-control" id="nameField" placeholder="Your Name" />
+        </div>
+
+        <div class="form-group">
+            <label for="emailField">Email</label>
+            <input type="email" class="form-control" id="emailField" placeholder="Your Email" />
+        </div>
+
+        <div class="form-group">
+            <label for="phoneField">Phone</label>
+            <input type="text" class="form-control" id="phoneField" placeholder="Your Phone Number" />
+        </div>
+
+        <div class="form-group">
+            <label for="descField">Description</label>
+            <textarea class="form-control" id="descField" placeholder="Your Comments"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button><button type="reset" class="btn btn-default">Reset</button>
+    </form>
+    </div>
+
+    <a href="#" class="btn btn-primary btn-lg">New Columns for Generative Network <span class="badge">23</span></a>
+
+    <div class="well">
+        <p>Lorem ipsum dolor sit amet, consecuetur ... </p>
+    </div>
+
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#">Training</a></li>
+        <li><a href="#">Activity</a></li>
+        <li><a href="#">Liked Pages</a></li>
+    </ul>
+
+    <div class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#mynavbar-content">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">SitePoint</a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="mynavbar-content">
+                <ul class="nav navbar-nav">
+                    <li><a href="#">Home</a></li>
+                    <li class="active dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Board of Members</a></li>
+                            <li><a href="#">Developers Team</a></li>
+                            <li><a href="#">Designing Team</a></li>
+                            <li class="divider"></li>
+                            <li><a href="#">Investors</a></li>
+                            <li><a href="#">Share holders</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">Pricing</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="#">Feedback</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <ol class="breadcrumb">
+      <li><a href="#">Home</a></li>
+      <li><a href="#">About</a></li>
+      <li class="active">Author</li>
+    </ol>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            ATTENTION
+        </div>
+        <div class="penel-body">
+            Lorem ipsum dolor sit ametnim ..........
+        </div>
+        <div class="panel-footer">
+            <a href="#" class="btn btn-danger btn-sm">Agree</a>
+            <a href="#" class="btn btn-default btn-sm">Decline</a>
+        </div>
+    </div>
+
+    <div class="media">
+        <a class="pull-left thumnail" href="#">
+            <img class="media-object" src="{{ url_for('static', filename='images/N.png') }}" alt="Syed Fazle Rahman">
+            <div class="caption">
+                <h4>Caption Goes Here~</h4>
+            </div>
+        </a>
+        <div class="media-body">
+            <h4 class="media-heading">Best papers for Deep Learning</h4>
+            <p>Lorem ipsum dolor sit amet, consectetur ...</p>
+        </div>
+    </div>
+
+    <ul class="list-group">
+        <li class="list-group-item list-group-item-success">Inbox <span class="badge">14</span></li>
+        <li class="list-group-item list-group-item-danger">Sent</li>
+        <li class="list-group-item">Drafts</li>
+        <li class="list-group-item">Deleted</li>
+        <li class="list-group-item">Spam</li>
+    </ul>
+
+    <div class="list-group">
+       <a href="#" class="list-group-item">
+           <h4 class="list-group-item-heading">Item heading</h4>
+           <p class="list-group-item-text">Lorem ipsum dolor sit ...</p>
+       </a>
+    </div>
+
+    <a href="/ml/nested">Nested</a><br>
+    <a href="/ml/samples/offset">Offset</a><br>
+</div>
+
+<h1>Offset</h1>
 <div class="row">
     <div class="col-xs-6 col-xs-offset-3 col1">
         <h1>Hello Learnable!</h1>
@@ -28,5 +194,29 @@
         <h1>Pulled Column</h1>
     </div>
 </div>
+
+<h1>Nested</h1>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 col1">
+            <h3>Column 1</h3>
+            <!-- Nesting Starts -->
+            <div class="row">
+                <div class="col-md-6 col3">
+                    <h3>Column 4</h3>
+                </div>
+                <div class="col-md-6 col4">
+                    <h3>Column 5</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col2">
+            <h3>Column 2</h3>
+        </div>
+    </div>
+</div>
+
+<script src="{{url_for('static', filename='js/jquery.js')}}"></script>
+<script src="{{url_for('static', filename='js/bootstrap.js')}}"></script>
 </body>
 </html>

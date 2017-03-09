@@ -103,9 +103,13 @@ class BaseData(object):
 
         # check missing data
         for col in self.column_names:
-            na_sum = self.loaded_data[col].isnull()
-            log.debug('%s(%d): %d' % (col, self.loaded_data.size, na_sum.size))
+            na_sum = self.loaded_data[col].isnull().sum()
+            na_indices = self.loaded_data.index[self.loaded_data[col].isnull()]
+            log.debug('%s(%d): %d' % (col, len(self.loaded_data.index), na_sum))
+            if na_indices.size > 0:
+                log.debug('----- %s:%s' % (col, na_indices))
             self.null_indices.setdefault(col, [])
+            self.null_indices[col] = na_indices
 
     def split_data(self):
         log.debug('not implemented')
