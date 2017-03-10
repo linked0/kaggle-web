@@ -6,17 +6,16 @@ import sys
 
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
-from gui.house_prices.PreprocessCentral import PreprocessView
-from gui.house_prices.PreprocessSetting import PreprocessSettingView
-from gui.house_prices.TestCentral import TestCentral
-from gui.house_prices.TestSetting import TestSettingView
-from gui.house_prices.TrainSetting import TrainSettingView
-from gui.house_prices.WebBrowserCentral import WebBrowserCentral
-from gui.house_prices.TrainCentral import CentralWidgetTrainProcess
+from gui.preprocess_views.PreprocessCentralV2 import PreprocessViewV2
+from gui.preprocess_views.PreprocessSettingV2 import PreprocessSettingViewV2
+from gui.TestCentral import TestCentral
+from gui.TestSetting import TestSettingView
+from gui.TrainSetting import TrainSettingView
+from gui.WebBrowserCentral import WebBrowserCentral
 
 import common.control_view
 import common.strings as strs
-
+from gui.TrainCentral import CentralWidgetTrainProcess
 from preprocess_data import preprocess as prep
 
 log.basicConfig(format=strs.log_format,level=log.DEBUG,stream=sys.stderr)
@@ -39,7 +38,7 @@ class MainWindow(QMainWindow):
         self.tabwidget.addTab(self.trainProcessView, strs.central_train_title)
 
         # set for preprocessing data
-        self.preprocessView = PreprocessView()
+        self.preprocessView = PreprocessViewV2()
         self.tabwidget.addTab(self.preprocessView, strs.central_preprocess_title)
 
         # set for examples
@@ -55,7 +54,7 @@ class MainWindow(QMainWindow):
 
         # set for DocWidget of selecting menu or algorithms
         self.train_selectionView = TrainSettingView()
-        self.preprocess_settingview = PreprocessSettingView(main_view=self.preprocessView )
+        self.preprocess_settingview = PreprocessSettingViewV2(main_view=self.preprocessView )
         self.test_settingview = TestSettingView()
         self.addDockWidget(Qt.RightDockWidgetArea, self.train_selectionView)
         self.addDockWidget(Qt.RightDockWidgetArea, self.preprocess_settingview)

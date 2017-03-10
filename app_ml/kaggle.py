@@ -9,8 +9,7 @@ from PyQt5.QtWidgets import *
 
 import common.strings as strs
 import ml_algs.model_data as mdata
-from gui.ml_analysis import MainWindow as mlm
-from gui.house_prices import MainWindow as housem
+from gui import MainWindow as mlm
 from ml_algs.decision_tree import AlgDecisionTree
 from ml_algs.ensemble import AlgEnsemble
 from ml_algs.gaussian_nb import AlgGaussianNB
