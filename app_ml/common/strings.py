@@ -44,6 +44,7 @@ error_no_object_for_algorithm_name = "No object for algorithm name"
 error_obj_null = 'Object is NoneType'
 error_columns_not_defined = '컬럼 이름이 지정되지 않음(None)'
 error_no_data = '데이터가 로드되지 않았음'
+error_no_datastore = '데이터 스토어 객체가 존재하지 않음'
 
 # code config
 log_format = '>>>>>> %(filename)s:%(lineno)d:%(funcName)s:\t%(message)s'
@@ -51,6 +52,7 @@ log_format = '>>>>>> %(filename)s:%(lineno)d:%(funcName)s:\t%(message)s'
 
 # button
 btn_test = 'Test'
+btn_hello = 'Hello, World!'
 btn_run_nn = "Run Neural Net"
 btn_apply = 'Apply'
 btn_load_data = 'Load Data'
@@ -59,6 +61,7 @@ btn_show_detail = 'Detail'
 btn_validate_params = 'Validate Parameter'
 btn_save_parameters = 'Set Parameters'
 btn_grid_search = 'Run GridSearchCV'
+btn_select_one = 'Select One'
 
 # info
 info_parameters_default = 'defaults'

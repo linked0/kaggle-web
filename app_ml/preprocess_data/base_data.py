@@ -10,6 +10,12 @@ import pandas as pd
 log.basicConfig(format=strs.log_format,level=log.DEBUG,stream=sys.stderr)
 np.set_printoptions(linewidth=1000)
 
+from enum import Enum
+class State(Enum):
+    Init = 0
+    Load = 1
+    Preprocess = 2
+    Train = 3
 
 class BaseData(object):
     def __init__(self):
@@ -17,6 +23,7 @@ class BaseData(object):
         self.data_name = None
         self.data_file = None
         self.column_names = None
+        self.label_name = None
         self.X = None
         self.y = None
         self.org_X = None
@@ -31,6 +38,7 @@ class BaseData(object):
         self.null_indices = {}
         self.preprocessed = False
         self.cur_dimen_reduct_method = const.param_none
+        self.cur_state = State.Init
 
     def init(self):
         self.data_name = None
@@ -58,9 +66,12 @@ class BaseData(object):
         log.debug('columns:%s' % columns)
         self.set_columns(columns)
 
+    def get_column_names(self):
+        return self.column_names
+
     def set_label_name(self, label):
         log.debug('label:%s' % label)
-        self.label = label
+        self.label_name = label
 
     def set_data_file(self, path):
         self.init()
@@ -74,16 +85,18 @@ class BaseData(object):
                 print("LINE %d=== \n%s" % (i, f.readline()))
         log.debug('end')
 
-    # hj-deprecated
-    def load_data(self):
-        log.debug('start')
-
     def load_data2(self):
         # hj-comment: 대용량 파일을 읽어올 때 어떻게 할지 고민을 해야함
         self.loaded_data = pd.read_csv(self.data_file)
+        self.cur_state = State.Load
+        self.column_names = self.loaded_data.columns
 
     def get_data(self):
         return self.loaded_data
+
+    def get_cur_state(self):
+        log.debug('Current State:%s', self.cur_state)
+        return self.cur_state
 
     def _check_basic_data(self):
         if self.column_names is None:
@@ -245,3 +258,9 @@ class BaseData(object):
             return values
         else:
             return np.argmax(values, axis=1)
+
+    ###########################################################################
+    # hj-deprecated
+    ###########################################################################
+    def load_data(self):
+        log.debug('start')

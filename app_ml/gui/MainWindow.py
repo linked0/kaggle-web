@@ -31,14 +31,14 @@ class MainWindow(QMainWindow):
         self.tabwidget = QTabWidget()
 
         # set data store
-        prep.set_data_name(prep.data_house_prices)
+        # prep.set_data_name(prep.data_house_prices)
 
         # set for training model
         self.trainProcessView = CentralWidgetTrainProcess()
         self.tabwidget.addTab(self.trainProcessView, strs.central_train_title)
 
         # set for preprocessing data
-        self.preprocessView = PreprocessViewV2()
+        self.preprocessView = PreprocessViewV2(main_view=self)
         self.tabwidget.addTab(self.preprocessView, strs.central_preprocess_title)
 
         # set for examples
@@ -54,7 +54,7 @@ class MainWindow(QMainWindow):
 
         # set for DocWidget of selecting menu or algorithms
         self.train_selectionView = TrainSettingView()
-        self.preprocess_settingview = PreprocessSettingViewV2(main_view=self.preprocessView )
+        self.preprocess_settingview = self.preprocessView.get_settingview()
         self.test_settingview = TestSettingView()
         self.addDockWidget(Qt.RightDockWidgetArea, self.train_selectionView)
         self.addDockWidget(Qt.RightDockWidgetArea, self.preprocess_settingview)

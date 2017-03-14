@@ -109,8 +109,9 @@ class TrainSettingMainWidget(QWidget):
     def on_cmb_data_changed(self, index):
         value  = str(self.cmb_data.currentText())
         log.debug('>>>>> start - data name:%s' % (value))
-        prep.set_data_name(value)
-        prep.load_data()
+        if value != prep.data_none:
+            prep.set_data_name(value)
+            prep.load_data()
 
     # def on_gridsearch_changed(self, p_int):
     #     if p_int == 0:
