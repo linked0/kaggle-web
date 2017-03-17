@@ -47,20 +47,6 @@ def load_data():
     data_store.load_data2()
 
 
-def preprocess_data(force_process=False):
-    log.debug('start - %d' % (force_process))
-    create_data_store(force_process)
-    ds = data_store_dict[data_store_name]
-    if ds is None:
-        return
-    ds.preprocess_data()
-
-
-def analyze_data():
-    log.debug('start')
-    ds = data_store_dict[data_store_name]
-
-
 def create_data_store(force_process=False):
     log.debug('start: %s' % data_store_name)
     global data_store, data_store_dict
@@ -77,6 +63,31 @@ def create_data_store(force_process=False):
             log.debug('data store is not created because of name mismatch')
         data_store = ds
         data_store_dict[data_store_name] = ds
+
+def get_col_infos():
+    if data_store is not None:
+        return data_store.get_col_infos()
+    else:
+        return None
+
+
+
+###########################################################################
+# hj-deprecated
+###########################################################################
+
+def preprocess_data(force_process=False):
+    log.debug('start - %d' % (force_process))
+    create_data_store(force_process)
+    ds = data_store_dict[data_store_name]
+    if ds is None:
+        return
+    ds.preprocess_data()
+
+
+def analyze_data():
+    log.debug('start')
+    ds = data_store_dict[data_store_name]
 
 
 def get_data_names():

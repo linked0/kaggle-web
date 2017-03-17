@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import sys
 import os
 import logging as log
@@ -5,6 +6,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 import common.strings as strs
+from common import config
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
@@ -28,49 +30,74 @@ class PreprocessViewV2(QWidget):
         self.idx_survived = None
         self.idx_died = None
 
-        layout = QVBoxLayout()
-        self.setLayout(layout)
+        self.layout = QVBoxLayout()
+        self.setLayout(self.layout)
 
-        self.hello_btn = QPushButton(strs.btn_hello)
-        layout.addWidget(self.hello_btn)
+        self.col_cont = QWidget()
+        self.col_cont_layout = QGridLayout()
+        self.col_cont.setLayout(self.col_cont_layout)
+        self.col_cont.setMaximumHeight(config.preprocess_central_col_cont_height)
+        self.layout.addWidget(self.col_cont)
+        # pal = QPalette();
+        # pal.setColor(QPalette.Background, Qt.red);
+        # self.col_cont.setAutoFillBackground(True);
+        # self.col_cont.setPalette(pal);
 
-        self.column_group = QButtonGroup()
+        self.detail_cont = QWidget()
+        self.detail_cont_layout = QVBoxLayout()
+        self.detail_cont.setLayout(self.detail_cont_layout)
+        self.layout.addWidget(self.detail_cont)
+
+        self.col_group = QButtonGroup()
 
     def get_settingview(self):
         return self.setting_view
 
     def showEvent(self, event):
         log.debug('start')
-        self.init_columns_info()
+        infos = prep.get_col_infos()
+        if infos is not None:
+            row = 0
+            for info in infos:
+                self.col_cont_layout.addWidget(ColumnPropertyView(info, self.col_group), row, 0)
+                row += 1
 
-    def init_columns_info(self):
-        log.debug('start')
-        col_names = prep.get_col_names()
-        for col in col_names:
-            print(col)
 
-class ColumnPropertyLineView(QWidget):
-    def __init__(self, col_name, missing_num, value_cat, btn_group, parent=None):
-        super(ColumnPropertyLineView, self).__init__(parent)
+class ColumnPropertyView(QWidget):
+    def __init__(self, col_info, btn_group, parent=None):
+        super(ColumnPropertyView, self).__init__(parent)
 
-        self.col_name = col_name
+        self.col_name = col_info['name']
 
         layout = QHBoxLayout()
         self.setLayout(layout)
+        self.setMinimumHeight(config.preprocess_central_item_height)
 
         self.sel_radio = QRadioButton()
         self.sel_radio.clicked.connect(self.on_clicked_sel_radio)
         btn_group.addButton(self.sel_radio)
         layout.addWidget(self.sel_radio)
 
-        self.name_label = QLabel(str(missing_num))
+        self.name_label = QLabel(str(col_info['name']))
         layout.addWidget(self.name_label)
+        pal = QPalette(); # background 지정
+        pal.setColor(QPalette.Background, Qt.red);
+        self.name_label.setAutoFillBackground(True);
+        self.name_label.setPalette(pal);
 
-        self.missing_label = QLabel(str(self.missing_num))
+        self.missing_label = QLabel(str(col_info['missing_num']))
         layout.addWidget(self.missing_label)
 
-        self.cat_label = QLabel(value_cat)
-        layout.addWidget(self.cat_label)
+        # background 지정
+        pal = QPalette();
+        pal.setColor(QPalette.Background, Qt.cyan);
+        self.setAutoFillBackground(True);
+        self.setPalette(pal);
+
+        log.debug('Contents Margins:%s' % (self.getContentsMargins(),))
+
+        # self.cat_label = QLabel(value_cat)
+        # layout.addWidget(self.cat_label)
 
     def on_clicked_sel_radio(self):
         log.debug('start')

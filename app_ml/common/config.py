@@ -10,6 +10,9 @@ train_setting_score_text_height = 15
 train_setting_score_params_height = 60
 train_setting_score_grid_height = 20
 
+preprocess_central_col_cont_height = 500
+preprocess_central_item_height = 30
+
 # Color
 hyper_param_normal_bg = 'background-color: white' #Qt.white
 hyper_param_hilite_bg = 'background-color: cyan' #Qt.cyan

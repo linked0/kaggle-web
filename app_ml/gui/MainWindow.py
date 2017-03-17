@@ -41,13 +41,13 @@ class MainWindow(QMainWindow):
         self.preprocessView = PreprocessViewV2(main_view=self)
         self.tabwidget.addTab(self.preprocessView, strs.central_preprocess_title)
 
-        # set for examples
-        self.testCentral = TestCentral()
-        self.tabwidget.addTab(self.testCentral, strs.central_test_title)
-
         # set for web browser
         self.webbrowser = WebBrowserCentral()
         self.tabwidget.addTab(self.webbrowser, strs.central_web_title)
+
+        # set for examples
+        self.testCentral = TestCentral()
+        self.tabwidget.addTab(self.testCentral, strs.central_test_title)
 
         self.tabwidget.currentChanged.connect(self.on_tab_changed)
         layout.addWidget(self.tabwidget)
@@ -57,10 +57,10 @@ class MainWindow(QMainWindow):
         self.preprocess_settingview = self.preprocessView.get_settingview()
         self.test_settingview = TestSettingView()
         self.addDockWidget(Qt.RightDockWidgetArea, self.train_selectionView)
-        self.addDockWidget(Qt.RightDockWidgetArea, self.preprocess_settingview)
-        self.addDockWidget(Qt.RightDockWidgetArea, self.test_settingview)
-        self.removeDockWidget(self.preprocess_settingview)
-        self.removeDockWidget(self.test_settingview)
+        # self.addDockWidget(Qt.RightDockWidgetArea, self.preprocess_settingview)
+        # self.addDockWidget(Qt.RightDockWidgetArea, self.test_settingview)
+        # self.removeDockWidget(self.preprocess_settingview)
+        # self.removeDockWidget(self.test_settingview)
         self.current_rightdock = self.train_selectionView
 
         self.setCentralWidget(centralwidget)

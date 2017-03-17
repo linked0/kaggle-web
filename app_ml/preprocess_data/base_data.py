@@ -39,11 +39,13 @@ class BaseData(object):
         self.preprocessed = False
         self.cur_dimen_reduct_method = const.param_none
         self.cur_state = State.Init
+        self.column_infos = []
 
     def init(self):
         self.data_name = None
         self.data_file = None
         self.column_names = None
+        self.label_name = None
         self.X = None
         self.y = None
         self.org_X = None
@@ -58,6 +60,8 @@ class BaseData(object):
         self.null_indices = {}
         self.preprocessed = False
         self.cur_dimen_reduct_method = const.param_none
+        self.cur_state = State.Init
+        self.column_infos = []
 
     def set_columns(self, columns):
         self.column_names = columns
@@ -124,6 +128,45 @@ class BaseData(object):
             self.null_indices.setdefault(col, [])
             self.null_indices[col] = na_indices
 
+    def analyze(self):
+        log.debug('start')
+        if self.column_names is None:
+            log.debug(strs.error_columns_not_defined)
+            return
+
+        for col in self.column_names:
+            self.column_infos.append(self._analyze_column(col));
+
+    def _analyze_column(self, col):
+        info = {'name': col}
+
+        # check missing data
+        na_sum = self.loaded_data[col].isnull().sum()
+        na_indices = self.loaded_data.index[self.loaded_data[col].isnull()]
+        log.debug('%s(%d): %d' % (col, len(self.loaded_data.index), na_sum))
+        if na_indices.size > 0:
+            log.debug('----- %s:%s' % (col, na_indices))
+        info.setdefault('missing_num', 0)
+        info['missing_num'] = na_sum
+        info.setdefault('missing_indices', None)
+        info['missing_indices'] = na_indices
+        return info
+
+    def get_col_infos(self):
+        log.debug('start')
+        if len(self.column_infos) == 0:
+            self.analyze()
+
+        return self.column_infos
+
+    def preprocess(self):
+        log.debug('start')
+
+
+
+    ###########################################################################
+    # hj-deprecated
+    ###########################################################################
     def split_data(self):
         log.debug('not implemented')
 
@@ -259,8 +302,5 @@ class BaseData(object):
         else:
             return np.argmax(values, axis=1)
 
-    ###########################################################################
-    # hj-deprecated
-    ###########################################################################
     def load_data(self):
         log.debug('start')
