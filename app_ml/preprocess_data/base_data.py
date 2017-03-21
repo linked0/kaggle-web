@@ -150,6 +150,7 @@ class BaseData(object):
         info['missing_num'] = na_sum
         info.setdefault('missing_indices', None)
         info['missing_indices'] = na_indices
+        info['use_value'] = True
         return info
 
     def get_col_infos(self):
@@ -158,6 +159,9 @@ class BaseData(object):
             self.analyze()
 
         return self.column_infos
+
+    def get_col_values(self, col_name):
+        return self.loaded_data[col_name]
 
     def preprocess(self):
         log.debug('start')

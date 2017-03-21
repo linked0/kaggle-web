@@ -70,7 +70,15 @@ def get_col_infos():
     else:
         return None
 
+def get_col_values(col_name):
+    return data_store.get_col_values(col_name)
 
+
+def get_dirty_flag():
+    return False
+
+def set_data_label(label):
+    data_store.set_label_name(label)
 
 ###########################################################################
 # hj-deprecated

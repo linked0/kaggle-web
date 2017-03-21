@@ -49,6 +49,9 @@ error_no_datastore = '데이터 스토어 객체가 존재하지 않음'
 # code config
 log_format = '>>>>>> %(filename)s:%(lineno)d:%(funcName)s:\t%(message)s'
 
+# Preprocess pane strings
+preprocess_central_col_sect_title = 'Columns Information'
+preprocess_central_label_sel_title = 'Select Data Label'
 
 # button
 btn_test = 'Test'
