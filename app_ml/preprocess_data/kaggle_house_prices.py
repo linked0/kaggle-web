@@ -16,9 +16,8 @@ test_data_file = data_root + 'test.csv'
 data_desc_file = data_root + 'data_description.txt'
 
 class KaggleHousePrices(BaseData):
-    def __init__(self):
-        super(KaggleHousePrices, self).__init__()
-        self.data_name = 'kaggle_house_prices'
+    def __init__(self, name):
+        super(KaggleHousePrices, self).__init__(name)
         self.data_file = train_data_file
         log.debug('start')
 

@@ -31,7 +31,6 @@ class PreprocessViewV2(QWidget):
         self.idx_survived = None
         self.idx_died = None
         self.col_info_set = False   # 컬럼 정보가 세팅되었는지 확인
-        self.label_name = ""        # 컬럼들중에서 Label(y값)으로 지정된 컬럼 이름
         self.prev_label_name = ""
 
         # 최상위 레이아웃과 스크롤 영역 세팅
@@ -81,13 +80,15 @@ class PreprocessViewV2(QWidget):
         return self.setting_view
 
     def on_combo_changed(self, seltext):
-        self.prev_label_name = self.label_name
-        self.label_name = seltext
-        if self.label_name != self.prev_label_name:
-            log.debug('changed label: ' + seltext)
+        if prep.get_label_name() == self.prev_label_name:
+            return
 
+        log.debug('changed label: ' + seltext)
+        if seltext != strs.btn_select_one:
+            self.prev_label_name = prep.get_label_name()
             prep.set_data_label(seltext)
             self.reset_info()
+
 
     def showEvent(self, event):
         log.debug('start')
@@ -106,7 +107,8 @@ class PreprocessViewV2(QWidget):
                 self.label_sel_combo.addItem(info['name'])
 
                 # add to columns info section
-                self.cols_view_layout.addWidget(ColumnPropertyView(info, self.col_group, self), row, col)
+                prop_view = ColumnPropertyView(info, self.col_group, self.detail_view, self)
+                self.cols_view_layout.addWidget(prop_view, row, col)
                 self.cols_view_layout.setRowStretch(row, 0)
                 if col == 2:
                     row += 1
@@ -116,27 +118,34 @@ class PreprocessViewV2(QWidget):
             self.cols_view.setMaximumHeight(row * (config.preprocess_central_item_height + 5))
             self.col_info_set = True;
 
+            log.debug('label_name:{0}'.format(prep.get_label_name()))
+            if prep.get_label_name() != None:
+                index = self.label_sel_combo.findText(prep.get_label_name())
+                if index >= 0:
+                    self.label_sel_combo.setCurrentIndex(index)
+
     def reset_info(self):
         self.detail_view.reset();
 
-        log.debug('prev label:%s, cur label:%s' % (self.prev_label_name, self.label_name))
+        log.debug('prev label:%s, cur label:%s' % (self.prev_label_name, prep.get_label_name()))
         prev_widget = None
         cur_widget = None
         items = (self.cols_view_layout.itemAt(i).widget() for i in range(self.cols_view_layout.count()))
         for widget in items:
             if widget.col_name == self.prev_label_name:
                 prev_widget = widget
-            elif widget.col_name == self.label_name:
+            elif widget.col_name == prep.get_label_name():
                 cur_widget = widget
         log.debug('selected cur widget:%s' % cur_widget)
 
 
 class ColumnPropertyView(QWidget):
-    def __init__(self, col_info, btn_group, parent=None):
+    def __init__(self, col_info, btn_group, detail_view, parent=None):
         super(ColumnPropertyView, self).__init__(parent)
 
         self.col_name = col_info['name']
         self.parent = parent
+        self.detail_view = detail_view
 
         # border settng
         self.setStyleSheet("border:1px solid rgb(0, 0, 0); ")
@@ -173,8 +182,7 @@ class ColumnPropertyView(QWidget):
         # layout.addWidget(self.cat_label)
 
     def on_clicked_sel_radio(self):
-        log.debug('start')
-        self.parent.detail_view.show_detail_info(self.col_name)
+        self.detail_view.show_detail_info(self.col_name)
 
 
 class ColumnDetailView(QWidget):
@@ -183,6 +191,7 @@ class ColumnDetailView(QWidget):
         log.debug('start')
 
         # data
+        self.cur_col = None
         self.col_values = None
 
         # layout
@@ -191,19 +200,22 @@ class ColumnDetailView(QWidget):
 
         # distribution plotting view
         self.fig, self.axes = plt.subplots(1, 2)
+        self.hist_plot = self.axes[0]
+        self.chart_plot = self.axes[1]
         self.plot_canvas = FigureCanvas(self.fig)
         layout.addWidget(self.plot_canvas)
 
         log.debug('parent: %s', self.parent)
 
     def show_detail_info(self, col_name):
-        log.debug('start')
-        if self.col_values is None:
+        log.debug('start - %s' % col_name)
+        if col_name != self.cur_col:
+            self.cur_col = col_name
             self.col_values = prep.get_col_values(col_name)
 
-        # self.axes[0].scatter()
-        # self.as_dist.grid()
-        # self.fig.canvas.draw()
+        self.hist_plot.hist(self.col_values)
+        self.hist_plot.grid()
+        self.fig.canvas.draw()
 
     def reset(self):
         for ax in self.axes:

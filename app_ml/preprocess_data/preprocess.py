@@ -54,11 +54,11 @@ def create_data_store(force_process=False):
     log.debug('data store: {0}'.format(ds))
     if force_process is True or ds is None:
         if data_store_name == data_kaggle:
-            ds = KaggleData2()
+            ds = KaggleData2(data_store_name)
         elif data_store_name == data_mnist:
-            ds = MnistData()
+            ds = MnistData(data_store_name)
         elif data_store_name == data_house_prices:
-            ds = KaggleHousePrices()
+            ds = KaggleHousePrices(data_store_name)
         else:
             log.debug('data store is not created because of name mismatch')
         data_store = ds
@@ -79,6 +79,9 @@ def get_dirty_flag():
 
 def set_data_label(label):
     data_store.set_label_name(label)
+
+def get_label_name():
+    return data_store.get_label_name()
 
 ###########################################################################
 # hj-deprecated

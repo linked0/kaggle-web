@@ -6,6 +6,7 @@ import common.strings as strs
 import numpy as np
 import common.config as const
 import pandas as pd
+from six.moves import cPickle as pickle
 
 log.basicConfig(format=strs.log_format,level=log.DEBUG,stream=sys.stderr)
 np.set_printoptions(linewidth=1000)
@@ -18,9 +19,9 @@ class State(Enum):
     Train = 3
 
 class BaseData(object):
-    def __init__(self):
+    def __init__(self, name):
         log.debug('start')
-        self.data_name = None
+        self.data_name = name
         self.data_file = None
         self.column_names = None
         self.label_name = None
@@ -41,27 +42,7 @@ class BaseData(object):
         self.cur_state = State.Init
         self.column_infos = []
 
-    def init(self):
-        self.data_name = None
-        self.data_file = None
-        self.column_names = None
-        self.label_name = None
-        self.X = None
-        self.y = None
-        self.org_X = None
-        self.org_y = None
-        self.X_train = None
-        self.y_train = None
-        self.X_valid = None
-        self.y_valid = None
-        self.X_test = None
-        self.y_test = None
-        self.loaded_data = None
-        self.null_indices = {}
-        self.preprocessed = False
-        self.cur_dimen_reduct_method = const.param_none
-        self.cur_state = State.Init
-        self.column_infos = []
+        self.load_config()
 
     def set_columns(self, columns):
         self.column_names = columns
@@ -76,11 +57,10 @@ class BaseData(object):
     def set_label_name(self, label):
         log.debug('label:%s' % label)
         self.label_name = label
+        self.save_config()
 
-    def set_data_file(self, path):
-        self.init()
-        log.debug('start')
-        self.data_file = path
+    def get_label_name(self):
+        return self.label_name
 
     def view_head(self):
         log.debug('start')
@@ -166,7 +146,35 @@ class BaseData(object):
     def preprocess(self):
         log.debug('start')
 
+    def get_config_file_name(self):
+        file_name = strs.file_name_config + '_' + self.data_name + '.txt'
+        log.debug(file_name)
+        return file_name
 
+    def load_config(self):
+        log.debug('start')
+        try:
+            with open(self.get_config_file_name()) as f:
+                config = pickle.load(f)
+                self.data_name = config['data_name']
+                self.label_name = config['label_name']
+                log.debug(self.label_name)
+        except Exception as e:
+            log.debug('Unable to read data from {0}:{1}'.format(self.get_config_file_name(), e))
+
+    def save_config(self):
+        log.debug('start')
+        try:
+            log.debug('saving')
+            with open(self.get_config_file_name(), 'wb') as f:
+                log.debug('saving~')
+                config = {
+                    'data_name': self.data_name,
+                    'label_name': self.label_name,
+                }
+                pickle.dump(config, f, pickle.HIGHEST_PROTOCOL)
+        except Exception as e:
+            log.debug('Unable to save data to {0}:{1}'.format(self.get_config_file_name(), e))
 
     ###########################################################################
     # hj-deprecated

@@ -12,9 +12,9 @@ image_size = 28
 num_labels = 10
 
 class MnistData(BaseData):
-    def __init__(self):
+    def __init__(self, name):
         log.debug('start')
-        super(MnistData, self).__init__()
+        super(MnistData, self).__init__(name)
         self.data_name = 'MNinst'
         self.data_file = '~/pooh/poohdrop/large-data/notMNIST2.pickle'
 

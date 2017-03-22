@@ -14,9 +14,8 @@ log.basicConfig(format=strs.log_format,level=log.DEBUG,stream=sys.stderr)
 
 
 class KaggleData2(BaseData):
-    def __init__(self):
-        super(KaggleData2, self).__init__()
-
+    def __init__(self, name):
+        super(KaggleData2, self).__init__(name)
         self.data_file = './data/train.csv'
         self.column_names = ['Pclass', 'Sex', 'Age', 'SibSp', 'Parch', 'Fare', 'Embarked']
         self.column_names = None

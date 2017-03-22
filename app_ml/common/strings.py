@@ -68,3 +68,6 @@ btn_select_one = 'Select One'
 
 # info
 info_parameters_default = 'defaults'
+
+# filename
+file_name_config = './data/config'

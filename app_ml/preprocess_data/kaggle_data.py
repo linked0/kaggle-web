@@ -19,9 +19,8 @@ column_names = ['Pclass', 'Sex', 'Age', 'SibSp', 'Parch', 'Fare', 'Embarked']
 
 
 class KaggleData(BaseData):
-    def __init__(self):
-        super(KaggleData, self).__init__()
-        self.data_name = 'kaggle'
+    def __init__(self, name):
+        super(KaggleData, self).__init__(name)
         self.data_file = './data/train.csv'
         self.column_names = ['Pclass', 'Sex', 'Age', 'SibSp', 'Parch', 'Fare', 'Embarked']
         log.debug('start')
