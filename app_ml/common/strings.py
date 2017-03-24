@@ -39,12 +39,16 @@ title_feature_selction = "Feature Selection"
 title_feature_extraction = "Feature Extraction"
 
 # errors
-error_hyper_param_not_selected = '@@@ Hyperparameter not selected'
-error_no_object_for_algorithm_name = "No object for algorithm name"
-error_obj_null = 'Object is NoneType'
-error_columns_not_defined = '컬럼 이름이 지정되지 않음(None)'
-error_no_data = '데이터가 로드되지 않았음'
-error_no_datastore = '데이터 스토어 객체가 존재하지 않음'
+error_hyper_param_not_selected = 'ERROR: @@@ Hyperparameter not selected'
+error_no_object_for_algorithm_name = "ERROR: No object for algorithm name"
+error_obj_null = 'ERROR: Object is NoneType'
+error_columns_not_defined = 'ERROR: 컬럼 이름이 지정되지 않음(None)'
+error_no_data = 'ERROR: 데이터가 로드되지 않았음'
+error_no_datastore = 'ERROR: 데이터 스토어 객체가 존재하지 않음'
+error_no_column_values = 'ERROR: 컬럼 데이터가 존재하지 않음'
+error_no_label_values = 'ERROR: 데이터 레이블이 존재하지 않음(레이블 컬럼이 지정되지 않은 것일 수 있음)'
+error_type_error_exception = 'ERROR: TypeError exception'
+error_column_name_not_specified = 'ERROR: 데이터 분석을 위한 컬럼이름이 지정되지 않음'
 
 # code config
 log_format = '>>>>>> %(filename)s:%(lineno)d:%(funcName)s:\t%(message)s'
@@ -65,6 +69,10 @@ btn_validate_params = 'Validate Parameter'
 btn_save_parameters = 'Set Parameters'
 btn_grid_search = 'Run GridSearchCV'
 btn_select_one = 'Select One'
+ctl_txt_column_detail_info_missing = 'Missing Values Count'
+ctl_txt_column_detail_info_type = 'Type'
+ctl_txt_column_detail_info_value_set = 'Value Set'
+ctl_txt_column_detail_info_desc = 'Description'
 
 # info
 info_parameters_default = 'defaults'

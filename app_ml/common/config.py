@@ -10,10 +10,14 @@ train_setting_score_text_height = 15
 train_setting_score_params_height = 60
 train_setting_score_grid_height = 20
 
-preprocess_central_col_cont_height = 300
+preprocess_central_col_cont_height = 200
 preprocess_central_col_detail_height = 400
 preprocess_central_item_height = 45
 preprocess_central_radio_width = 20
+
+# Style
+style_default_view_height = 30
+style_column_detail_info_cont_view_height = 100
 
 # Color
 hyper_param_normal_bg = 'background-color: white' #Qt.white

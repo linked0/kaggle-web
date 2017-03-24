@@ -143,6 +143,12 @@ class BaseData(object):
     def get_col_values(self, col_name):
         return self.loaded_data[col_name]
 
+    def get_label_values(self):
+        if self.label_name is not None and self.label_name != '':
+            return self.loaded_data[self.label_name]
+        else:
+            return None;
+
     def preprocess(self):
         log.debug('start')
 

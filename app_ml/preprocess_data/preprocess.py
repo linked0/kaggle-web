@@ -64,21 +64,29 @@ def create_data_store(force_process=False):
         data_store = ds
         data_store_dict[data_store_name] = ds
 
+
 def get_col_infos():
     if data_store is not None:
         return data_store.get_col_infos()
     else:
         return None
 
+
 def get_col_values(col_name):
     return data_store.get_col_values(col_name)
+
+
+def get_label_values():
+    return data_store.get_label_values()
 
 
 def get_dirty_flag():
     return False
 
+
 def set_data_label(label):
     data_store.set_label_name(label)
+
 
 def get_label_name():
     return data_store.get_label_name()

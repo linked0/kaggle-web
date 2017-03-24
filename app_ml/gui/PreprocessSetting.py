@@ -36,6 +36,6 @@ class PreprocessSettingView(QDockWidget):
         #     self.initialized = True
 
     def on_combo_changed(self, who, seltxt):
-        log.debug('>>>>> who:%s - selected:%s' % (who, seltxt))
+        log.debug('who:%s - selected:%s' % (who, seltxt))
         if 'None' not in seltxt:
             self.central_view.analyze_column_data(who, seltxt)
