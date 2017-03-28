@@ -17,17 +17,18 @@ from matplotlib.figure import Figure
 log.basicConfig(format=strs.log_format, level=log.DEBUG, stream=sys.stderr)
 
 
-def input_widget_horizontal(title, min_title_height=None, min_cont_height=None):
+def input_widget_horizontal(title_text, min_title_height=None, min_cont_height=None):
     widget = QWidget()
     layout = QHBoxLayout()
     widget.setLayout(layout)
 
-    title = QLabel(title)
+    title = QLabel(title_text)
     if min_title_height is not None:
         title.setMinimumHeight(min_title_height)
     layout.addWidget(title)
 
     cont = QLabel()
+    cont.setStyleSheet('border: 1px solid black;')
     if min_cont_height is not None:
         cont.setMinimumHeight(min_cont_height)
     layout.addWidget(cont)
@@ -35,17 +36,19 @@ def input_widget_horizontal(title, min_title_height=None, min_cont_height=None):
     return widget
 
 
-def input_widget_vertical(title, min_title_height=None, min_cont_height=None):
+def input_widget_vertical(title_text, min_title_height=None, min_cont_height=None):
     widget = QWidget()
     layout = QVBoxLayout()
-    widget.setLayout(QVBoxLayout())
+    widget.setLayout(layout)
 
-    title = QLabel(title)
+    title = QLabel(title_text)
+    title.setStyleSheet('border: 1px')
     if min_title_height is not None:
         title.setMinimumHeight(min_title_height)
     layout.addWidget(title)
 
     cont = QLabel()
+    cont.setStyleSheet('border: 1px solid black;')
     if min_cont_height is not None:
         cont.setMinimumHeight(min_cont_height)
     layout.addWidget(cont)

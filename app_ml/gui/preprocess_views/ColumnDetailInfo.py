@@ -22,6 +22,7 @@ log.basicConfig(format=strs.log_format, level=log.DEBUG, stream=sys.stderr)
 survived_color = '#6699ff'
 died_color = '#ff6666'
 
+
 class ColumnInfoView(QWidget):
     def __init__(self, col_name, parent=None):
         super(ColumnInfoView, self).__init__(parent)
@@ -41,25 +42,28 @@ class ColumnInfoView(QWidget):
 
         # widget - Missing value counts
         wg_missing = input_widget_horizontal(strs.ctl_txt_column_detail_info_missing)
-        layout.addWidget(wg_missing, 0, 0, 2)
+        layout.addWidget(wg_missing, 0, 0)
+        layout.setColumnStretch(0, 2)
 
-        # widgeet - Value type
+        # widget - Value type
         wg_type = input_widget_horizontal(strs.ctl_txt_column_detail_info_type)
-        layout.addWidget(wg_type, 1, 2, 2)
+        layout.addWidget(wg_type, 0, 1)
+        layout.setColumnStretch(1, 2)
 
         # widget - Value set
-        wg_type = input_widget_vertical(strs.ctl_txt_column_detail_info_type,
+        wg_type = input_widget_vertical(strs.ctl_txt_column_detail_info_value_set,
                                         config.style_default_view_height,
                                         config.style_column_detail_info_cont_view_height)
-        layout.addWidget(wg_type, 1, 0, 4)
+        layout.addWidget(wg_type, 1, 0, 1, 4)
 
         # widget - Description
         wg_type = input_widget_vertical(strs.ctl_txt_column_detail_info_desc,
                                         config.style_default_view_height,
                                         config.style_column_detail_info_cont_view_height)
-        layout.addWidget(wg_type, 2, 0, 4)
+        layout.addWidget(wg_type, 2, 0, 1, 4)
 
-    def show_info(self):
+    def show_info(self, col_name):
+        self.col_name = col_name
         self.init_data()
 
 

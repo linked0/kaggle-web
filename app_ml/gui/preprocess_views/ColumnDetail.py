@@ -75,9 +75,14 @@ class ColumnDetailView(QWidget):
             log.debug(strs.error_no_label_values)
 
         # Information view
-        self.info_view.show_info()
+        self.info_view.show_info(self.cur_col)
 
     def show_hist_plot(self):
+        # 현재 플롯 클리어
+        self.hist_plot.cla()
+        self.fig.canvas.draw()
+
+        # 선택된 컬럼에 대한 플로팅
         try:
             self.hist_plot.hist(self.col_values.dropna())
             self.hist_plot.grid()
