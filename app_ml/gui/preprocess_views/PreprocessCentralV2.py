@@ -87,6 +87,7 @@ class PreprocessViewV2(QWidget):
             self.reset_info()
 
 
+    # 컬럼 이름들 보여주기
     def showEvent(self, event):
         log.debug('start')
 
@@ -116,10 +117,21 @@ class PreprocessViewV2(QWidget):
             self.col_info_set = True;
 
             log.debug('label_name:{0}'.format(prep.get_label_name()))
-            if prep.get_label_name() != None:
+            if prep.get_label_name() is not None:
                 index = self.label_sel_combo.findText(prep.get_label_name())
                 if index >= 0:
                     self.label_sel_combo.setCurrentIndex(index)
+
+                # 레이블 컬럼은 X값으로 선택되지 않도록 처리
+                for idx in reversed(range(self.cols_view_layout.count())):
+                    # takeAt does both the jobs of itemAt and removeWidget
+                    # namely it removes an item and returns it
+                    widget = self.cols_view_layout.itemAt(idx).widget()
+
+                    if widget is not None:
+                        # widget will be None if the item is a layout
+                        widget.setLabelColumn()
+
 
     def reset_info(self):
         self.detail_view.reset();
@@ -181,3 +193,7 @@ class ColumnPropertyView(QWidget):
     def on_clicked_sel_radio(self):
         self.detail_view.show_detail_info(self.col_name)
 
+    def setLabelColumn(self):
+        log.debug('start')
+        self.use_check.setChecked(False)
+        self.use_check.setCheckable(False)

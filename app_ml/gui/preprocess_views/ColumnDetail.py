@@ -30,6 +30,8 @@ class ColumnDetailView(QWidget):
         self.cur_col = None
         self.col_values = None
         self.label_values = None
+        self.label_index_map = None
+        self.label_color = ['b', 'r', 'g', 'c', 'm', 'y']
 
         # layout
         layout = QGridLayout()
@@ -53,32 +55,44 @@ class ColumnDetailView(QWidget):
             ax.cla()
         self.fig.canvas.draw()
 
+    def load_col_values(self, col_name):
+        if col_name != self.cur_col:
+            self.cur_col = col_name
+            self.col_values = prep.get_col_values(col_name)
+
+    def load_label_values(self):
+        if self.label_values is None:
+            self.label_values = prep.get_label_values()
+
+        unique_labels = np.unique(self.label_values)
+        self.label_index_map = dict()
+        for label in unique_labels:
+            self.label_index_map.setdefault(label, 0)
+            self.label_index_map[label] = (self.label_values == label)
+
     def show_detail_info(self, col_name):
         log.debug('start - %s' % col_name)
 
         # 컬럼 값 히스토그램
-        if col_name != self.cur_col:
-            self.cur_col = col_name
-            self.col_values = prep.get_col_values(col_name)
         if self.col_values is not None:
-            self.show_hist_plot()
+            self.show_hist_plot(col_name)
         else:
             log.debug(strs.error_no_column_values)
 
         # label(y값)과 연계된 챠트
-        if self.label_values is None:
-            self.label_values = prep.get_label_values()
+        self.load_label_values()
 
         if self.label_values is not None:
-            self.show_chart_plot()
+            self.show_chart_plot(col_name)
         else:
             log.debug(strs.error_no_label_values)
 
         # Information view
         self.info_view.show_info(self.cur_col)
 
-    def show_hist_plot(self):
+    def show_hist_plot(self, col_name):
         # 현재 플롯 클리어
+        self.load_col_values(col_name)
         self.hist_plot.cla()
         self.fig.canvas.draw()
 
@@ -90,9 +104,89 @@ class ColumnDetailView(QWidget):
         except TypeError:
             log.debug(strs.error_type_error_exception)
 
-    def show_chart_plot(self):
-        pass
+    # 각 레이블별 컬럼값을 구분하여 보여주기
+    def show_chart_plot(self, col_name):
+        log.debug('>>>>>> start')
+        self.load_col_values(col_name)
+        col_map = np.unique(self.col_values)
+        if len(col_map) <= 10:
+            log.debug('col_map:%s' % col_map)
+            self.analyze_small_range_data(col_map)
+        else:
+            log.debug('col_map length:%d' % len(col_map))
+            self.analyze_big_range_data(col_map)
 
+        self.chart_plot.grid()
+        self.fig.canvas.draw()
+
+    def analyze_small_range_data(self, col_map):
+        width = 0.35
+
+        self.load_label_values()
+        counts_of_each_label = {}
+        for label_val in self.label_index_map:
+            counts_of_each_label.setdefault(label_val, [])
+            for value in col_map:
+                counts_of_each_label[label_val].append(np.sum(self.col_values[self.label_index_map[label_val]] == value))
+
+        N = len(col_map)
+        ind = np.arange(N)
+
+        self.chart_plot.cla()
+        i = 0
+        for label_val in self.label_index_map:
+            log.debug('label: {0}'.format(label_val))
+            self.chart_plot.bar(ind+width*i,
+                                counts_of_each_label[label_val],
+                                width,
+                                color=self.label_color[i],
+                                label=label_val)
+            i += 1
+
+        self.chart_plot.set_xlabel(self.cur_col, fontsize=12)
+        self.chart_plot.set_ylabel('Number of people', fontsize=12)
+        self.chart_plot.legend(loc='upper right')
+        log.debug('ind + width:%s, col_map:%s' % (ind + width, col_map))
+        self.chart_plot.set_xticks(ind + width)
+        self.chart_plot.set_xticklabels(col_map)
+
+
+    def analyze_big_range_data(self, col_map):
+        pass
+        # bincount = 0
+        # if colname == 'Fare':
+        #     bincount = 25
+        #     width = 20
+        # elif colname == 'Age':
+        #     bincount = 100
+        #
+        # col_surv = self.X[colname][self.idx_survived]
+        # col_died = self.X[colname][self.idx_died]
+        #
+        # minval, maxval = min(col_surv), max(col_surv)
+        # log.debug('min:%s, max:%s' % (minval, maxval) )
+        # bins = np.linspace(minval, maxval, bincount)
+        #
+        # count_surv, _ = np.histogram(col_surv, bins)
+        # count_died, _ = np.histogram(col_died, bins)
+        #
+        # self.axs[idx].cla()
+        # if colname == 'Fare':
+        #     self.axs[idx].bar(bins[:-1], np.log10(count_surv), width=width,
+        #                       color=survived_color, label='Survived')
+        #     self.axs[idx].bar(bins[:-1], -np.log10(count_died), width=width,
+        #                       color=died_color, label='Died')
+        # elif colname == 'Age':
+        #     self.axs[idx].bar(bins[:-1], np.log10(count_surv), color=survived_color,
+        #                       label='Survived')
+        #     self.axs[idx].bar(bins[:-1], -np.log10(count_died), color=died_color,
+        #                       label='Died')
+        # self.axs[idx].set_ylabel('Number of people')
+        # self.axs[idx].set_xlabel(colname)
+        # self.axs[idx].set_yticks(range(-3, 4), (10**abs(k) for k in range(-3, 4)))
+        # self.axs[idx].set_yticklabels((10**abs(k) for k in range(-3, 4)))
+
+    # 참고 소스
     # def analyze_column_data(self, idx):
     #     log.debug('>>>>> idx:%d, column:%s' % (idx, colname))
     #     col_map = np.unique(self.X[colname])
@@ -129,7 +223,6 @@ class ColumnDetailView(QWidget):
     #     log.debug('ind + width:%s, col_map:%s' % (ind + width, col_map))
     #     self.axs[idx].set_xticks(ind + width)
     #     self.axs[idx].set_xticklabels(col_map)
-    #
     #
     # def analyze_big_range_data(self, col_map):
     #     bincount = 0
