@@ -4,8 +4,8 @@ main_menu_train = 'Train'
 main_menu_example = 'Examples'
 
 
-central_preprocess_title = 'Preprocess'
-central_train_title = 'Train'
+central_preprocess_title = '프리프로세싱'
+central_train_title = '모델 학습'
 central_test_title = 'Test'
 central_web_title = 'Web Browser'
 start = 'Train'
@@ -46,7 +46,7 @@ error_columns_not_defined = 'ERROR: 컬럼 이름이 지정되지 않음(None)'
 error_no_data = 'ERROR: 데이터가 로드되지 않았음'
 error_no_datastore = 'ERROR: 데이터 스토어 객체가 존재하지 않음'
 error_no_column_values = 'ERROR: 컬럼 데이터가 존재하지 않음'
-error_no_label_values = 'ERROR: 데이터 레이블이 존재하지 않음(레이블 컬럼이 지정되지 않은 것일 수 있음)'
+error_no_label_value = 'ERROR: 데이터 레이블이 존재하지 않음(레이블 컬럼이 지정되지 않은 것일 수 있음)'
 error_type_error_exception = 'ERROR: TypeError exception'
 error_column_name_not_specified = 'ERROR: 데이터 분석을 위한 컬럼이름이 지정되지 않음'
 
@@ -73,6 +73,14 @@ ctl_txt_column_detail_info_missing = 'Missing Values Count'
 ctl_txt_column_detail_info_type = 'Type'
 ctl_txt_column_detail_info_value_set = 'Value Set'
 ctl_txt_column_detail_info_desc = 'Description'
+
+# Column info
+col_missing_count = 'missing_count'
+col_missing_indices = 'missing_indices'
+col_use_value = 'use_value'
+col_data_type = 'data_type'
+col_zero_sum = 'zero_sum'
+col_recommend_preprocess = 'recommend_prepress'
 
 # info
 info_parameters_default = 'defaults'

@@ -19,7 +19,15 @@ class State(Enum):
     Train = 3
 
 class BaseData(object):
+    """
+    BaseData는 데이터를 로딩하고 프리프로세싱 처리를 하는 클래스
+    """
     def __init__(self, name):
+        """
+        BaseData constructor
+        :param name: 데이터 이름
+        :return: void
+        """
         log.debug('start')
         self.data_name = name
         self.data_file = None
@@ -27,8 +35,8 @@ class BaseData(object):
         self.label_name = None
         self.X = None
         self.y = None
-        self.org_X = None
-        self.org_y = None
+        self.org_X = None # deprecated
+        self.org_y = None # deprecated
         self.X_train = None
         self.y_train = None
         self.X_valid = None
@@ -40,7 +48,7 @@ class BaseData(object):
         self.preprocessed = False
         self.cur_dimen_reduct_method = const.param_none
         self.cur_state = State.Init
-        self.column_infos = []
+        self.column_infos = {}
 
         self.load_config()
 
@@ -115,22 +123,48 @@ class BaseData(object):
             return
 
         for col in self.column_names:
-            self.column_infos.append(self._analyze_column(col));
+            self.column_infos.setdefault(col, None)
+            self.column_infos[col] = self._analyze_column(col);
 
     def _analyze_column(self, col):
         info = {'name': col}
+        col_data = self.loaded_data[col]
+
+        BaseData.set_col_data_info(info, strs.col_use_value, True, True)
 
         # check missing data
-        na_sum = self.loaded_data[col].isnull().sum()
-        na_indices = self.loaded_data.index[self.loaded_data[col].isnull()]
+        na_sum = col_data.isnull().sum()
+        na_indices = self.loaded_data.index[col_data.isnull()]
+        BaseData.set_col_data_info(info, strs.col_missing_count, na_sum, 0)
+        BaseData.set_col_data_info(info, strs.col_missing_indices, na_indices, None)
+
         log.debug('%s(%d): %d' % (col, len(self.loaded_data.index), na_sum))
-        if na_indices.size > 0:
-            log.debug('----- %s:%s' % (col, na_indices))
-        info.setdefault('missing_num', 0)
-        info['missing_num'] = na_sum
-        info.setdefault('missing_indices', None)
-        info['missing_indices'] = na_indices
-        info['use_value'] = True
+        # log.debug('----- %s:%s' % (col, na_indices))
+
+        # 데이터가 0인 개수
+        zero_sum = 0
+        if col_data.dtype == np.int:
+            zero_sum = self.loaded_data[col_data == 0].count()
+            BaseData.set_col_data_info(info, strs.col_data_type, 'int', '')
+        elif col_data.dtype == np.float or col_data.dtype == np.double:
+            zero_sum = self.loaded_data[col_data == 0.0].count()
+            BaseData.set_col_data_info(info, strs.col_data_type, 'float', '')
+        else:
+            zero_sum = 0
+            BaseData.set_col_data_info(info, strs.col_data_type, 'str', '')
+        BaseData.set_col_data_info(info, strs.col_zero_sum, zero_sum, 0)
+        BaseData.set_col_data_info(info, strs.col_recommend_preprocess, '', '')
+
+        log.debug(BaseData.desc(info))
+        return info
+
+    @staticmethod
+    def set_col_data_info(info, key, value, default_val):
+        info.setdefault(key, default_val)
+        info[key] = value
+
+    @staticmethod
+    def print_col_info(info):
         return info
 
     def get_col_infos(self):
@@ -139,6 +173,11 @@ class BaseData(object):
             self.analyze()
 
         return self.column_infos
+
+    def get_col_info(self, col_name):
+        log.debug('start')
+        self.get_col_infos();
+        return self.column_infos[col_name]
 
     def get_col_values(self, col_name):
         return self.loaded_data[col_name]
@@ -182,17 +221,98 @@ class BaseData(object):
         except Exception as e:
             log.debug('Unable to save data to {0}:{1}'.format(self.get_config_file_name(), e))
 
+    def preprocess_data(self, force_process = False):
+        """
+        프리프로세싱을 진행한다. 데이터가 로드되지 않았다면 데이터로드부터 한다. 데이터 로딩후에 다음과 같은 프리프로세싱을 진행한다.
+        1) 미싱데이터 처리
+        2) One Hot Encoding
+        3) Standardization
+        4) Outlier 처리 
+        :return: void
+        """
+        # if self.cur_dimen_reduct_method != mdata.get_dimem_reduct_method():
+        #     self.preprocessed = False
+        log.debug('>>>>> start')
+
+        if self.preprocessed == True and force_process == False:
+            return
+
+        # 레이블이 지정되지 않았으면 메시지 띄우고 리턴
+        if self.label_name is None:
+            log.debug(strs.error_no_label_value)
+            return
+
+        self.y = self.loaded_data[self.label_name]
+        self.X = self.loaded_data.ix[:, self.loaded_data.columns != self.label_name]
+        log.debug("X dataset:{}".format(self.X.columns))
+
+        # 프리프로세싱 시작
+        self.process_missing_data()
+        # self.merge_data(self.X)
+        # self.convert_data_type(self.X)
+        # self.X = self.convert_to_dummy_data(self.X)  # manipulate categorical data
+        # self.X = self.X.astype(np.float32)
+        # self.y = self.y.astype(np.float32)
+        # self.X_df = self.X
+        # self.X = self.X.values
+        # self.y = self.y.values
+        # # y = one_hot_encode(y)
+        # # self.X = self.standardize_data(self.X)  # standardize
+        # log.debug('>>>>> Processed Data:\n{0}'.format(self.X[:5]))
+        #
+        # # split data into train, validation, test data
+        # self.X_train, self.X_test, self.y_train, self.y_test = \
+        #     train_test_split(self.X, self.y, test_size=0.20, random_state=0)
+        # self.X_train, self.X_valid, self.y_train, self.y_valid = \
+        #     train_test_split(self.X_train, self.y_train, test_size=0.20, random_state=0)
+        #
+        # log.debug('X shape: %s, y shape: %s' % (self.X.shape, self.y.shape))
+        # log.debug('X train shape: %s, y train shape: %s' % (self.X_train.shape, self.y_train.shape))
+        # log.debug('X valid shape: %s, y valid shape: %s' % (self.X_valid.shape, self.y_valid.shape))
+        # log.debug('X test shape: %s, y test shape: %s' % (self.X_test.shape, self.y_test.shape))
+        # self.preprocessed = True
+
+        log.debug('##### data name: %s' % self.data_name)
+        return
+
+    def process_missing_data(self):
+        self.analyze()
+
+        if 'Age' in self.column_names:
+            log.debug("process missing data for Age")
+            self.X.loc[:, 'Age'] = self.X["Age"].fillna(self.X["Age"].median())
+
+        if 'Embarked' in self.column_names:
+            log.debug("process missing data for Embarked")
+            self.X.loc[:, 'Embarked'] = self.X['Embarked'].fillna('S')
+
+        if 'Fare' in self.column_names and 'Pclass' in self.column_names:
+            log.debug("process missing data for Fare")
+            # nullfares = X[X.Fare == 0]
+            nullfares = self.X[(self.X.Fare == 0) | (self.X.Fare.isnull())]
+            log.debug('len of nullfares:{0}'.format(nullfares))
+            for index in nullfares.index:
+                clsFare = self.X[self.X.Pclass == self.X.loc[index, 'Pclass']][self.X.Fare != 0].Fare.mean()
+                # log.debug("Pclass: %s, Fare: %f" % (X.loc[index, 'Pclass'], clsFare))
+                self.X.loc[index, 'Fare'] = clsFare
+
     ###########################################################################
     # hj-deprecated
     ###########################################################################
+    def check_missing_data(self):
+        for col in self.X.columns:
+            dtype = self.X[col].dtype
+            if dtype == np.int:
+                log.debug("%s(int): # of null: %d, # of zero: %d" %
+                              (col, self.X[col].isnull().sum(), self.X[self.X[col] == 0][col].count()))
+            elif dtype == np.float:
+                log.debug("%s(float): # of null: %d, # of zero: %d" %
+                              (col, self.X[col].isnull().sum(), self.X[self.X[col] == 0.0][col].count()))
+            else:
+                log.debug("%s(object): # of null: %d" % (col, self.X[col].isnull().sum()))
+
     def split_data(self):
         log.debug('not implemented')
-
-    def preprocess_data(self):
-        # if self.cur_dimen_reduct_method != mdata.get_dimem_reduct_method():
-        #     self.preprocessed = False
-        log.debug('##### data name: %s' % self.data_name)
-        return
 
     def get_titanic(self):
         return self.loaded_data

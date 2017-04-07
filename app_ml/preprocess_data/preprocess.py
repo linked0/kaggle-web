@@ -71,6 +71,12 @@ def get_col_infos():
     else:
         return None
 
+def get_col_info(col_name):
+    if data_store is not None:
+        return data_store.get_col_info(col_name)
+    else:
+        return None
+
 
 def get_col_values(col_name):
     return data_store.get_col_values(col_name)

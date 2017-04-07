@@ -13,8 +13,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 from preprocess_data import preprocess as prep
 from matplotlib.figure import Figure
-from gui.preprocess_views.PreprocessSettingV2 import PreprocessSettingViewV2
-from gui.preprocess_views.ColumnDetailInfo import ColumnInfoView
+from gui.preprocess_views.Setting import PreprocessSettingViewV2
+from gui.preprocess_views.CentralDetailInfo import CentralDetailInfo
 
 log.basicConfig(format=strs.log_format, level=log.DEBUG, stream=sys.stderr)
 
@@ -45,7 +45,7 @@ class ColumnDetailView(QWidget):
         layout.addWidget(self.plot_canvas, 0, 0)
 
         # detail information view (Missing Value Count, Type, Value Set, Desc)
-        self.info_view = ColumnInfoView(self.cur_col)
+        self.info_view = CentralDetailInfo(self.cur_col)
         layout.addWidget(self.info_view, 0, 1)
 
         log.debug('parent: %s', self.parent)
@@ -72,6 +72,7 @@ class ColumnDetailView(QWidget):
 
     def show_detail_info(self, col_name):
         log.debug('start - %s' % col_name)
+        self.load_col_values(col_name)
 
         # 컬럼 값 히스토그램
         if self.col_values is not None:
@@ -85,10 +86,10 @@ class ColumnDetailView(QWidget):
         if self.label_values is not None:
             self.show_chart_plot(col_name)
         else:
-            log.debug(strs.error_no_label_values)
+            log.debug(strs.error_no_label_value)
 
         # Information view
-        self.info_view.show_info(self.cur_col)
+        self.info_view.show_desc_info(self.cur_col)
 
     def show_hist_plot(self, col_name):
         # 현재 플롯 클리어

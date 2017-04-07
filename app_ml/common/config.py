@@ -16,8 +16,9 @@ preprocess_central_item_height = 45
 preprocess_central_radio_width = 20
 
 # Style
-style_default_view_height = 30
-style_column_detail_info_cont_view_height = 100
+default_view_height = 30
+column_detail_info_cont_view_height = 150
+column_detail_info_cont_view_max_width = 500
 
 # Color
 hyper_param_normal_bg = 'background-color: white' #Qt.white

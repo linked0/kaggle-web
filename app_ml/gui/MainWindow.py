@@ -6,8 +6,8 @@ import sys
 
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
-from gui.preprocess_views.PreprocessCentralV2 import PreprocessViewV2
-from gui.preprocess_views.PreprocessSettingV2 import PreprocessSettingViewV2
+from gui.preprocess_views.Central import PreprocessViewV2
+from gui.preprocess_views.Setting import PreprocessSettingViewV2
 from gui.TestCentral import TestCentral
 from gui.TestSetting import TestSettingView
 from gui.TrainSetting import TrainSettingView

@@ -7,22 +7,18 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 import common.strings as strs
 from common import config
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.figure import Figure
-import matplotlib.pyplot as plt
 import numpy as np
-from preprocess_data import preprocess as prep
-from matplotlib.figure import Figure
-from gui.preprocess_views.PreprocessSettingV2 import PreprocessSettingViewV2
-from gui.preprocess_views.ColumnDetail import ColumnDetailView
+from common.ui_utils import *
+from gui.preprocess_views.ColumnProperty import ColumnProperty
 
 log.basicConfig(format=strs.log_format, level=log.DEBUG, stream=sys.stderr)
 
-class PreprocessViewV2(QWidget):
-    def __init__(self, main_view=None, parent=None):
-        super(PreprocessViewV2, self).__init__(parent)
-        self.main_view = main_view
-        self.setting_view = PreprocessSettingViewV2(self.main_view)
+
+class ColumnsView(QWidget):
+    def __init__(self, ctrl_view=None, parent=None):
+        super(ColumnsView, self).__init__(parent)
+
+        self.ctrl_view = ctrl_view
         self.X = None
         self.y = None
         self.idx_survived = None
@@ -55,26 +51,13 @@ class PreprocessViewV2(QWidget):
         self.cols_view_layout = QGridLayout()
         self.cols_view.setLayout(self.cols_view_layout)
         scroll.setWidget(self.cols_view)
-        # pal = QPalette();
-        # pal.setColor(QPalette.Background, Qt.red);
+        # pal = QPalette()
+        # pal.setColor(QPalette.Background, QColor(255,0,0))
         # self.cols_view.setAutoFillBackground(True);
-        # self.cols_view.setPalette(pal);
-
-        # 한 컬럼 데이터에 대한 세부 정보 위젯
-        self.detail_view = ColumnDetailView(self)
-        self.detail_view_layout = QVBoxLayout()
-        self.detail_view.setLayout(self.detail_view_layout)
-        self.detail_view.setMinimumHeight(config.preprocess_central_col_detail_height)
-        self.layout.addWidget(self.detail_view)
-        # pal = QPalette();
-        # pal.setColor(QPalette.Background, Qt.blue);
-        # self.detail_view.setAutoFillBackground(True);
-        # self.detail_view.setPalette(pal);
+        # self.cols_view.setPalette(pal)
 
         self.col_group = QButtonGroup()
 
-    def get_settingview(self):
-        return self.setting_view
 
     def on_combo_changed(self, seltext):
         if prep.get_label_name() == self.prev_label_name:
@@ -86,10 +69,10 @@ class PreprocessViewV2(QWidget):
             prep.set_data_label(seltext)
             self.reset_info()
 
+            # 컬럼 이름들 보여주기
 
-    # 컬럼 이름들 보여주기
     def showEvent(self, event):
-        log.debug('start')
+        log.debug('>>>>>> start')
 
         if self.col_info_set is True and prep.get_dirty_flag() is False:
             return
@@ -100,12 +83,12 @@ class PreprocessViewV2(QWidget):
             col = 0
             self.label_sel_combo.addItem(strs.btn_select_one)
 
-            for info in infos:
+            for name, info in infos.items():
                 # add to label selection combo
-                self.label_sel_combo.addItem(info['name'])
+                self.label_sel_combo.addItem(name)
 
                 # add to columns info section
-                prop_view = ColumnPropertyView(info, self.col_group, self.detail_view, self)
+                prop_view = ColumnProperty(info, self.col_group, self.ctrl_view, self)
                 self.cols_view_layout.addWidget(prop_view, row, col)
                 self.cols_view_layout.setRowStretch(row, 0)
                 if col == 4:
@@ -113,7 +96,7 @@ class PreprocessViewV2(QWidget):
                     col = 0
                 else:
                     col += 1
-            self.cols_view.setMaximumHeight((row+1) * (config.preprocess_central_item_height+5))
+            self.cols_view.setMaximumHeight((row + 1) * (config.preprocess_central_item_height + 5))
             self.col_info_set = True;
 
             log.debug('label_name:{0}'.format(prep.get_label_name()))
@@ -132,9 +115,8 @@ class PreprocessViewV2(QWidget):
                         # widget will be None if the item is a layout
                         widget.setLabelColumn()
 
-
     def reset_info(self):
-        self.detail_view.reset();
+        self.ctrl_view.reset_detail_view();
 
         log.debug('prev label:%s, cur label:%s' % (self.prev_label_name, prep.get_label_name()))
         prev_widget = None
@@ -148,52 +130,3 @@ class PreprocessViewV2(QWidget):
         log.debug('selected cur widget:%s' % cur_widget)
 
 
-class ColumnPropertyView(QWidget):
-    def __init__(self, col_info, btn_group, detail_view, parent=None):
-        super(ColumnPropertyView, self).__init__(parent)
-
-        self.col_name = col_info['name']
-        self.parent = parent
-        self.detail_view = detail_view
-
-        # border settng
-        self.setStyleSheet("border:1px solid rgb(0, 0, 0); ")
-
-        # layout
-        layout = QHBoxLayout()
-        self.setLayout(layout)
-        self.setMinimumHeight(config.preprocess_central_item_height)
-
-        self.sel_radio = QRadioButton()
-        self.sel_radio.clicked.connect(self.on_clicked_sel_radio)
-        self.sel_radio.setMaximumWidth(config.preprocess_central_radio_width)
-        btn_group.addButton(self.sel_radio)
-        layout.addWidget(self.sel_radio)
-
-        self.name_label = QLabel(str(col_info['name']))
-        layout.addWidget(self.name_label)
-
-        # self.missing_label = QLabel(str(col_info['missing_num']))
-        # layout.addWidget(self.missing_label)
-
-        self.use_check = QCheckBox()
-        self.use_check.setMaximumWidth(config.preprocess_central_radio_width)
-        self.use_check.setChecked(col_info['use_value'])
-        layout.addWidget(self.use_check)
-
-        # background 지정
-        # pal = QPalette();
-        # pal.setColor(QPalette.Background, Qt.cyan);
-        # self.setAutoFillBackground(True);
-        # self.setPalette(pal);
-
-        # self.cat_label = QLabel(value_cat)
-        # layout.addWidget(self.cat_label)
-
-    def on_clicked_sel_radio(self):
-        self.detail_view.show_detail_info(self.col_name)
-
-    def setLabelColumn(self):
-        log.debug('start')
-        self.use_check.setChecked(False)
-        self.use_check.setCheckable(False)
