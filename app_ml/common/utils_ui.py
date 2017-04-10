@@ -2,20 +2,15 @@
 import sys
 import os
 import logging as log
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
+
 from PyQt5.QtWidgets import *
+from matplotlib.colors import ListedColormap
 import common.strings as strs
-from common import config
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
 import numpy as np
-from preprocess_data import preprocess as prep
-from matplotlib.figure import Figure
+
 
 log.basicConfig(format=strs.log_format, level=log.DEBUG, stream=sys.stderr)
-
 
 def input_widget_horizontal(title_text, min_title_height=None, min_cont_height=None):
     widget = QWidget()
@@ -56,3 +51,18 @@ def input_widget_vertical(title_text, min_title_height=None, min_cont_height=Non
         cont.setMaximumWidth(max_cont_width)
     layout.addWidget(cont)
     return widget, cont
+
+markers = ('s', 'x', 'o', '^', 'v')
+colors = ('red', 'blue', 'lightgreen', 'gray', 'cyan')
+
+
+def get_color_marker(index):
+    return colors[index], markers[index]
+
+
+def get_marker(index):
+    return markers[index]
+
+
+def get_color(index):
+    return colors[index]

@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import *
 import common.strings as strs
 from common import config
 import numpy as np
-from common.ui_utils import *
+from common.utils_ui import *
 
 log.basicConfig(format=strs.log_format, level=log.DEBUG, stream=sys.stderr)
 
@@ -17,7 +17,7 @@ class ColumnProperty(QWidget):
     def __init__(self, col_info, btn_group, ctrl_view, parent=None):
         super(ColumnProperty, self).__init__(parent)
 
-        self.col_name = col_info['name']
+        self.col_name = col_info[strs.col_name]
         self.ctrl_view = ctrl_view
         self.parent = parent
 
@@ -35,13 +35,13 @@ class ColumnProperty(QWidget):
         btn_group.addButton(self.sel_radio)
         layout.addWidget(self.sel_radio)
 
-        self.name_label = QLineEdit(str(col_info['name']))
+        self.name_label = QLineEdit(str(col_info[strs.col_name]))
         self.name_label.setReadOnly(True)
         layout.addWidget(self.name_label)
 
         self.use_check = QCheckBox()
         self.use_check.setMaximumWidth(config.preprocess_central_radio_width)
-        self.use_check.setChecked(col_info['use_value'])
+        self.use_check.setChecked(col_info[strs.col_use_value])
         layout.addWidget(self.use_check)
 
         # background 지정

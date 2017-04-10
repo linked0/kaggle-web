@@ -6,8 +6,8 @@ import sys
 
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
-from gui.preprocess_views.Central import PreprocessViewV2
-from gui.preprocess_views.Setting import PreprocessSettingViewV2
+from gui.preprocess_views.central_main import CentralView
+from gui.preprocess_views.setting_main import PreprocessSettingViewV2
 from gui.TestCentral import TestCentral
 from gui.TestSetting import TestSettingView
 from gui.TrainSetting import TrainSettingView
@@ -38,7 +38,7 @@ class MainWindow(QMainWindow):
         self.tabwidget.addTab(self.trainProcessView, strs.central_train_title)
 
         # set for preprocessing data
-        self.preprocessView = PreprocessViewV2(main_view=self)
+        self.preprocessView = CentralView(main_view=self)
         self.tabwidget.addTab(self.preprocessView, strs.central_preprocess_title)
 
         # set for web browser

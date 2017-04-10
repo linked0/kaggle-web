@@ -13,15 +13,15 @@ import matplotlib.pyplot as plt
 import numpy as np
 from preprocess_data import preprocess as prep
 from matplotlib.figure import Figure
-from gui.preprocess_views.Setting import PreprocessSettingViewV2
-from gui.preprocess_views.CentralDetail import ColumnDetailView
-from gui.preprocess_views.CentralColumns import ColumnsView
+from gui.preprocess_views.setting_main import PreprocessSettingViewV2
+from gui.preprocess_views.central_detail import ColumnDetailView
+from gui.preprocess_views.central_columns import ColumnsView
 
 log.basicConfig(format=strs.log_format, level=log.DEBUG, stream=sys.stderr)
 
-class PreprocessViewV2(QWidget):
+class CentralView(QWidget):
     def __init__(self, main_view=None, parent=None):
-        super(PreprocessViewV2, self).__init__(parent)
+        super(CentralView, self).__init__(parent)
         self.setting_view = PreprocessSettingViewV2(main_view)
 
         # 최상위 레이아웃과 스크롤 영역 세팅

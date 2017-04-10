@@ -13,9 +13,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 from preprocess_data import preprocess as prep
 from matplotlib.figure import Figure
-from common.ui_utils import *
+from common.utils_ui import *
 
-from gui.preprocess_views.Setting import PreprocessSettingViewV2
+from gui.preprocess_views.setting_main import PreprocessSettingViewV2
 
 log.basicConfig(format=strs.log_format, level=log.DEBUG, stream=sys.stderr)
 
@@ -25,9 +25,9 @@ died_color = '#ff6666'
 # hj-comment, histogram 관련해서 구현시 참고: https://docs.google.com/document/d/1VT-QFtqGPK16nqk6RPSLs6zMEGQ742askoL2gjdcTXo/edit
 
 
-class CentralDetailInfo(QWidget):
+class CentralChart(QWidget):
     def __init__(self, col_name, parent=None):
-        super(CentralDetailInfo, self).__init__(parent)
+        super(CentralChart, self).__init__(parent)
         log.debug('start')
 
         if col_name is None or col_name == '':
@@ -76,5 +76,6 @@ class CentralDetailInfo(QWidget):
         col_info = prep.get_col_info(self.col_name)
         self.missing_cnts_input.setText(str(col_info[strs.col_missing_count]))
         self.value_set_input.setText(str(np.unique(self.col_values)))
+        self.value_type_input.setText(col_info[strs.col_data_type])
 
 

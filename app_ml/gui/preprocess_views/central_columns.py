@@ -8,8 +8,9 @@ from PyQt5.QtWidgets import *
 import common.strings as strs
 from common import config
 import numpy as np
-from common.ui_utils import *
-from gui.preprocess_views.ColumnProperty import ColumnProperty
+from common.utils_ui import *
+import preprocess_data.preprocess as prep
+from gui.preprocess_views.column_property import ColumnProperty
 
 log.basicConfig(format=strs.log_format, level=log.DEBUG, stream=sys.stderr)
 

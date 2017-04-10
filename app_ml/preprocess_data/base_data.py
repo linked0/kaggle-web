@@ -101,21 +101,6 @@ class BaseData(object):
 
         return True
 
-    def desc(self):
-        log.debug('start')
-        if self._check_basic_data() is False:
-            return
-
-        # check missing data
-        for col in self.column_names:
-            na_sum = self.loaded_data[col].isnull().sum()
-            na_indices = self.loaded_data.index[self.loaded_data[col].isnull()]
-            log.debug('%s(%d): %d' % (col, len(self.loaded_data.index), na_sum))
-            if na_indices.size > 0:
-                log.debug('----- %s:%s' % (col, na_indices))
-            self.null_indices.setdefault(col, [])
-            self.null_indices[col] = na_indices
-
     def analyze(self):
         log.debug('start')
         if self.column_names is None:
@@ -127,7 +112,7 @@ class BaseData(object):
             self.column_infos[col] = self._analyze_column(col);
 
     def _analyze_column(self, col):
-        info = {'name': col}
+        info = {strs.col_name: col}
         col_data = self.loaded_data[col]
 
         BaseData.set_col_data_info(info, strs.col_use_value, True, True)
@@ -145,17 +130,17 @@ class BaseData(object):
         zero_sum = 0
         if col_data.dtype == np.int:
             zero_sum = self.loaded_data[col_data == 0].count()
-            BaseData.set_col_data_info(info, strs.col_data_type, 'int', '')
+            BaseData.set_col_data_info(info, strs.col_data_type, 'Integer', '')
         elif col_data.dtype == np.float or col_data.dtype == np.double:
             zero_sum = self.loaded_data[col_data == 0.0].count()
-            BaseData.set_col_data_info(info, strs.col_data_type, 'float', '')
+            BaseData.set_col_data_info(info, strs.col_data_type, 'Double', '')
         else:
             zero_sum = 0
-            BaseData.set_col_data_info(info, strs.col_data_type, 'str', '')
+            BaseData.set_col_data_info(info, strs.col_data_type, 'String', '')
         BaseData.set_col_data_info(info, strs.col_zero_sum, zero_sum, 0)
         BaseData.set_col_data_info(info, strs.col_recommend_preprocess, '', '')
 
-        log.debug(BaseData.desc(info))
+        log.debug(BaseData.print_col_info(info))
         return info
 
     @staticmethod
@@ -165,7 +150,26 @@ class BaseData(object):
 
     @staticmethod
     def print_col_info(info):
-        return info
+        log.debug('start')
+        print('column name: ', info[strs.col_name])
+        print('missing count: ', info[strs.col_missing_count])
+        print('zero value count: ', info[strs.col_zero_sum])
+
+    @staticmethod
+    def desc(info):
+        log.debug('start')
+        # if self._check_basic_data() is False:
+        #     return
+        #
+        # # check missing data
+        # for col in self.column_names:
+        #     na_sum = self.loaded_data[col].isnull().sum()
+        #     na_indices = self.loaded_data.index[self.loaded_data[col].isnull()]
+        #     log.debug('%s(%d): %d' % (col, len(self.loaded_data.index), na_sum))
+        #     if na_indices.size > 0:
+        #         log.debug('----- %s:%s' % (col, na_indices))
+        #     self.null_indices.setdefault(col, [])
+        #     self.null_indices[col] = na_indices
 
     def get_col_infos(self):
         log.debug('start')

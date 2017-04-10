@@ -75,6 +75,7 @@ ctl_txt_column_detail_info_value_set = 'Value Set'
 ctl_txt_column_detail_info_desc = 'Description'
 
 # Column info
+col_name = 'col_name'
 col_missing_count = 'missing_count'
 col_missing_indices = 'missing_indices'
 col_use_value = 'use_value'

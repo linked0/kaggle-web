@@ -2,19 +2,16 @@
 import sys
 import os
 import logging as log
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
-import common.strings as strs
-from common import config
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.figure import Figure
-import matplotlib.pyplot as plt
+
 import numpy as np
+import matplotlib.pyplot as plt
+from common import strings as strs
+from PyQt5.QtWidgets import *
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from common.utils import *
+from common.utils_ui import *
+from gui.preprocess_views.central_chart import CentralChart
 from preprocess_data import preprocess as prep
-from matplotlib.figure import Figure
-from gui.preprocess_views.Setting import PreprocessSettingViewV2
-from gui.preprocess_views.CentralDetailInfo import CentralDetailInfo
 
 log.basicConfig(format=strs.log_format, level=log.DEBUG, stream=sys.stderr)
 
@@ -45,7 +42,7 @@ class ColumnDetailView(QWidget):
         layout.addWidget(self.plot_canvas, 0, 0)
 
         # detail information view (Missing Value Count, Type, Value Set, Desc)
-        self.info_view = CentralDetailInfo(self.cur_col)
+        self.info_view = CentralChart(self.cur_col)
         layout.addWidget(self.info_view, 0, 1)
 
         log.debug('parent: %s', self.parent)
@@ -122,9 +119,9 @@ class ColumnDetailView(QWidget):
 
     def analyze_small_range_data(self, col_map):
         width = 0.35
-
         self.load_label_values()
         counts_of_each_label = {}
+
         for label_val in self.label_index_map:
             counts_of_each_label.setdefault(label_val, [])
             for value in col_map:
@@ -153,54 +150,26 @@ class ColumnDetailView(QWidget):
 
 
     def analyze_big_range_data(self, col_map):
-        pass
-        # bincount = 0
-        # if colname == 'Fare':
-        #     bincount = 25
-        #     width = 20
-        # elif colname == 'Age':
-        #     bincount = 100
-        #
-        # col_surv = self.X[colname][self.idx_survived]
-        # col_died = self.X[colname][self.idx_died]
-        #
-        # minval, maxval = min(col_surv), max(col_surv)
-        # log.debug('min:%s, max:%s' % (minval, maxval) )
-        # bins = np.linspace(minval, maxval, bincount)
-        #
-        # count_surv, _ = np.histogram(col_surv, bins)
-        # count_died, _ = np.histogram(col_died, bins)
-        #
-        # self.axs[idx].cla()
-        # if colname == 'Fare':
-        #     self.axs[idx].bar(bins[:-1], np.log10(count_surv), width=width,
-        #                       color=survived_color, label='Survived')
-        #     self.axs[idx].bar(bins[:-1], -np.log10(count_died), width=width,
-        #                       color=died_color, label='Died')
-        # elif colname == 'Age':
-        #     self.axs[idx].bar(bins[:-1], np.log10(count_surv), color=survived_color,
-        #                       label='Survived')
-        #     self.axs[idx].bar(bins[:-1], -np.log10(count_died), color=died_color,
-        #                       label='Died')
-        # self.axs[idx].set_ylabel('Number of people')
-        # self.axs[idx].set_xlabel(colname)
-        # self.axs[idx].set_yticks(range(-3, 4), (10**abs(k) for k in range(-3, 4)))
-        # self.axs[idx].set_yticklabels((10**abs(k) for k in range(-3, 4)))
+        self.load_label_values()
+
+        bins = get_fd_bins(self.col_values)
+        width = 1.0 / ((len(self.label_index_map) + 1) * len(bins))
+
+        self.chart_plot.cla()
+        index = 0
+        for label_val in self.label_index_map:
+            hist_vals, _ = np.histogram(self.col_values[self.label_index_map[label_val]], bins)
+            self.chart_plot.bar(bins[:-1], hist_vals, width=width, color=get_color(index))
+            index += 1
+            width = width * 2
+
+        self.chart_plot.set_xlabel(self.cur_col, fontsize=12)
+        self.chart_plot.set_ylabel('Number of people', fontsize=12)
+        self.chart_plot.legend(loc='upper right')
+        self.chart_plot.set_xticks(bins + width)
+        self.chart_plot.set_xticklabels(bins)
 
     # 참고 소스
-    # def analyze_column_data(self, idx):
-    #     log.debug('>>>>> idx:%d, column:%s' % (idx, colname))
-    #     col_map = np.unique(self.X[colname])
-    #     if len(col_map) <= 10:
-    #         log.debug('col_map:%s' % (col_map))
-    #         self.analyze_small_range_data(idx, colname, col_map)
-    #     else:
-    #         log.debug('col_map length:%d' % len(col_map))
-    #         self.analyze_big_range_data(idx, colname, col_map)
-    #
-    #     self.axs[idx].grid()
-    #     self.fig.canvas.draw()
-    #
     # def analyze_small_range_data(self, col_map):
     #     width = 0.35
     #     col_survived = self.X[colname][self.idx_survived]

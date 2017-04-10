@@ -1,10 +1,3 @@
-### 폴더 구조 설명
-- lib 폴더는 일단 깃헙에서 제거됨
-- test/kevin_murphy 폴더는 일단 깃헙에서 제거됨
-
-### 필드 의미
-- 각각의 필드 의미를 파악해야 함. 
-
 ### 필드
 - PassengerId: int, 1부터 시작되는 승객 아이디
 - Survived: int, 생존여부, 예측의 대상이 되는 y 값
@@ -20,9 +13,6 @@
 - Cabin: str, 의미없음 
 - Embarked: char, Southampton, Cherbourg, Queenstown
     > Fare 평균은 C: 59.95, S: 27.08, Q: 13.28
-
-### 필드(비대상)
-
 
 ### 작업 순서
 1. 필드 의미 파악
