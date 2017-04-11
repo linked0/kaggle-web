@@ -1,16 +1,8 @@
 # -*- coding: utf-8 -*-
-import sys
-import os
-import logging as log
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
-import common.strings as strs
-from common import config
-import numpy as np
-from common.utils_ui import *
 import preprocess_data.preprocess as prep
-from gui.preprocess_views.column_property import ColumnProperty
+from common import config
+from common.utils_ui import *
+from gui.preprocess_views.column_info.property_control import PropertyControl
 
 log.basicConfig(format=strs.log_format, level=log.DEBUG, stream=sys.stderr)
 
@@ -89,7 +81,7 @@ class ColumnsView(QWidget):
                 self.label_sel_combo.addItem(name)
 
                 # add to columns info section
-                prop_view = ColumnProperty(info, self.col_group, self.ctrl_view, self)
+                prop_view = PropertyControl(info, self.col_group, self.ctrl_view, self)
                 self.cols_view_layout.addWidget(prop_view, row, col)
                 self.cols_view_layout.setRowStretch(row, 0)
                 if col == 4:

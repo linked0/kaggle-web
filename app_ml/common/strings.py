@@ -15,6 +15,8 @@ hyperparam_name = 'Hyperparameter Name'
 hyperparam_set = 'Set'
 best_score_title = 'Best Score'
 cur_score_title = 'Current Score'
+preprocess_columns_view = "컬럼정보"
+preprocess_heatmap_view = "Heat Map"
 
 score_alg_name = 'Algorithm: '
 score_acc_score = 'Accuracy: '

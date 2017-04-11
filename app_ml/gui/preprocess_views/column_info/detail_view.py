@@ -1,16 +1,10 @@
 # -*- coding: utf-8 -*-
-import sys
-import os
-import logging as log
 
-import numpy as np
-import matplotlib.pyplot as plt
-from common import strings as strs
-from PyQt5.QtWidgets import *
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+
 from common.utils import *
 from common.utils_ui import *
-from gui.preprocess_views.central_chart import CentralChart
+from gui.preprocess_views.column_info.dist_chart import CentralChart
 from preprocess_data import preprocess as prep
 
 log.basicConfig(format=strs.log_format, level=log.DEBUG, stream=sys.stderr)
@@ -18,9 +12,9 @@ log.basicConfig(format=strs.log_format, level=log.DEBUG, stream=sys.stderr)
 survived_color = '#6699ff'
 died_color = '#ff6666'
 
-class ColumnDetailView(QWidget):
+class DetailView(QWidget):
     def __init__(self, parent=None):
-        super(ColumnDetailView, self).__init__(parent)
+        super(DetailView, self).__init__(parent)
         log.debug('start')
 
         # data

@@ -13,9 +13,9 @@ from common.utils_ui import *
 log.basicConfig(format=strs.log_format, level=log.DEBUG, stream=sys.stderr)
 
 
-class ColumnProperty(QWidget):
+class PropertyControl(QWidget):
     def __init__(self, col_info, btn_group, ctrl_view, parent=None):
-        super(ColumnProperty, self).__init__(parent)
+        super(PropertyControl, self).__init__(parent)
 
         self.col_name = col_info[strs.col_name]
         self.ctrl_view = ctrl_view
