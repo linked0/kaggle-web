@@ -1,3 +1,63 @@
+### 적용할 것
+- 아래 <### plan> 부분 잊지 말기
+
+- 구글 Design 문서에 적어놓은 아이디어 확인 필요
+
+- LabelEncoder사용하기(Text Attribute)
+from sklearn.preprocessing import LabelEncoder
+encoder = LabelEncoder()
+housing_cat = housing["ocean_proximity"]       <--- 이런식으로 개별적으로 끊어놓고 처리함 
+housing_cat_encoded = encoder.fit_transform(housing_cat)
+housing_cat_encoded
+
+- Imputer 이용하기(hands-on machine learning 책)
+housing_num = housing.drop("ocean_proximity", axis=1) <-- Imputer 사용하려면 텍스트 attribute는 잠깐 제거해야함 
+X = imputer.transform(housing_num)
+The result is a plain Numpy array containing the transformed features. If you want to put it back into a Pandas DataFrame, it’s simple:
+housing_tr = pd.DataFrame(X, columns=housing_num.columns)
+
+- One Hot Encoding
+from sklearn.preprocessing import OneHotEncoder
+encoder = OneHotEncoder()
+housing_cat_1hot = encoder.fit_transform(housing_cat_encoded.reshape(-1,1))
+housing_cat_1hot
+<16513x5 sparse matrix of type '<class 
+
+==> from sklearn.preprocessing import LabelBinarizer가 한방에 끝낼 수 있어서 좋음
+
+- 프로팅을 이런식으로..
+housing.plot(kind='scatter', x='longitude', y='latitude', alpha=4,
+            s=housing['population']/100, label='population',
+            c='median_house_value', cmap=plt.get_cmap('jet'), colorbar=True)
+ Parameters
+ |      ----------
+ |      x, y : label or position, optional
+ |          Coordinates for each point.
+ |      s : scalar or array_like, optional
+ |          Size of each point.
+ |      c : label or position, optional
+ |          Color of each point.
+ |      **kwds : optional
+ |          Keyword arguments to pass on to :py:meth:`pandas.DataFrame.plot`.
+             
+- corr
+corr_matrix = housing.corr()
+
+- 새로운 필드를 만들어야 함
+housing['rooms_per_household'] = housing['total_rooms']/housing['households']
+housing['bedrooms_per_room']= housing['total_bedrooms']/housing['total_rooms']
+housing['population_per_household'] = housing['population']/housing['households']
+
+- Missing Values 처리 방법
+housing.dropna(subset=["total_bedrooms"])    # option 1
+housing.drop("total_bedrooms", axis=1)       # option 2
+median = housing["total_bedrooms"].median()
+housing["total_bedrooms"].fillna(median)     # option 3
+median은 기억하고 있어야 함 You will need it later to replace missing values in the test set when you want to evaluate your 
+system, and also once the system goes live to replace missing values in new data.
+
+
+
 ### 필드
 - PassengerId: int, 1부터 시작되는 승객 아이디
 - Survived: int, 생존여부, 예측의 대상이 되는 y 값
