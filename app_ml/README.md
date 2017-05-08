@@ -2,6 +2,7 @@
 - 아래 <### plan> 부분 잊지 말기
 
 - 구글 Design 문서에 적어놓은 아이디어 확인 필요
+- RNN & Skip gram 적용: word2vec의 하이퍼파라미터는 샘플링 레이트(http://mccormickml.com/2017/01/11/word2vec-tutorial-part-2-negative-sampling/)
 
 - LabelEncoder사용하기(Text Attribute)
 from sklearn.preprocessing import LabelEncoder
