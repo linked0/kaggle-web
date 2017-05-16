@@ -18,6 +18,7 @@ class DetailView(QWidget):
         log.debug('start')
 
         # data
+        self.ctrl_view = None
         self.cur_col = None
         self.col_values = None
         self.label_values = None
@@ -61,8 +62,9 @@ class DetailView(QWidget):
             self.label_index_map.setdefault(label, 0)
             self.label_index_map[label] = (self.label_values == label)
 
-    def show_detail_info(self, col_name):
+    def show_detail_info(self, col_name, property_ctrl):
         log.debug('start - %s' % col_name)
+        self.ctrl_view = property_ctrl
         self.load_col_values(col_name)
 
         # 컬럼 값 히스토그램
@@ -146,22 +148,26 @@ class DetailView(QWidget):
     def analyze_big_range_data(self, col_map):
         self.load_label_values()
 
-        bins = get_fd_bins(self.col_values)
-        width = 1.0 / ((len(self.label_index_map) + 1) * len(bins))
+        try:
+            bins = get_fd_bins(self.col_values)
+            width = 1.0 / ((len(self.label_index_map) + 1) * len(bins))
 
-        self.chart_plot.cla()
-        index = 0
-        for label_val in self.label_index_map:
-            hist_vals, _ = np.histogram(self.col_values[self.label_index_map[label_val]], bins)
-            self.chart_plot.bar(bins[:-1], hist_vals, width=width, color=get_color(index))
-            index += 1
-            width = width * 2
+            self.chart_plot.cla()
+            index = 0
+            for label_val in self.label_index_map:
+                hist_vals, _ = np.histogram(self.col_values[self.label_index_map[label_val]], bins)
+                self.chart_plot.bar(bins[:-1], hist_vals, width=width, color=get_color(index))
+                index += 1
+                width = width * 2
 
-        self.chart_plot.set_xlabel(self.cur_col, fontsize=12)
-        self.chart_plot.set_ylabel('Number of people', fontsize=12)
-        self.chart_plot.legend(loc='upper right')
-        self.chart_plot.set_xticks(bins + width)
-        self.chart_plot.set_xticklabels(bins)
+            self.chart_plot.set_xlabel(self.cur_col, fontsize=12)
+            self.chart_plot.set_ylabel('Number of people', fontsize=12)
+            self.chart_plot.legend(loc='upper right')
+            self.chart_plot.set_xticks(bins + width)
+            self.chart_plot.set_xticklabels(bins)
+        except Exception as e:
+            self.ctrl_view.exclude_column(self.cur_col)
+            log.debug('exception occured')
 
     # 참고 소스
     # def analyze_small_range_data(self, col_map):

@@ -57,6 +57,7 @@ housing["total_bedrooms"].fillna(median)     # option 3
 median은 기억하고 있어야 함 You will need it later to replace missing values in the test set when you want to evaluate your 
 system, and also once the system goes live to replace missing values in new data.
 
+### 프리프로세싱 방법
 
 
 ### 필드

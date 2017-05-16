@@ -35,8 +35,8 @@ class ColumnMainView(QWidget):
         log.debug('>>>>>> start')
         self.detail_view.reset()
 
-    def show_detail_info(self, colname):
-        self.detail_view.show_detail_info(colname)
+    def show_detail_info(self, colname, property_ctrl):
+        self.detail_view.show_detail_info(colname, property_ctrl)
 
     def backup(self):
         pass

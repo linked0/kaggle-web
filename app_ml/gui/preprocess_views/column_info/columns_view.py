@@ -51,7 +51,6 @@ class ColumnsView(QWidget):
 
         self.col_group = QButtonGroup()
 
-
     def on_combo_changed(self, seltext):
         if prep.get_label_name() == self.prev_label_name:
             return

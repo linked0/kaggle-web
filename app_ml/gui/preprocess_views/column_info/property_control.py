@@ -17,6 +17,7 @@ class PropertyControl(QWidget):
     def __init__(self, col_info, btn_group, ctrl_view, parent=None):
         super(PropertyControl, self).__init__(parent)
 
+        log.debug('col info: %s' % col_info)
         self.col_name = col_info[strs.col_name]
         self.ctrl_view = ctrl_view
         self.parent = parent
@@ -41,7 +42,9 @@ class PropertyControl(QWidget):
 
         self.use_check = QCheckBox()
         self.use_check.setMaximumWidth(config.preprocess_central_radio_width)
+        log.debug('use check: %s' % col_info[strs.col_use_value])
         self.use_check.setChecked(col_info[strs.col_use_value])
+        self.use_check.stateChanged.connect(self.on_clicked_use_check)
         layout.addWidget(self.use_check)
 
         # background 지정
@@ -54,10 +57,16 @@ class PropertyControl(QWidget):
         # layout.addWidget(self.cat_label)
 
     def on_clicked_sel_radio(self):
-        self.ctrl_view.show_detail_info(self.col_name)
+        self.ctrl_view.show_detail_info(self.col_name, self)
+        pass
+
+    def on_clicked_use_check(self):
+        log.debug('start')
         pass
 
     def setLabelColumn(self):
         log.debug('start')
+
+    def exclude_column(self, col_name):
         self.use_check.setChecked(False)
-        self.use_check.setCheckable(False)
+        log.debug('start: %s' % col_name)

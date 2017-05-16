@@ -14,7 +14,12 @@ def get_fd_bins(dist):
     log.debug('>>>>>> start')
 
     # use The Freedman-Diaconis rule h=2*IQR*n^(−1/3) to get bin width
-    bin_width, bins = freedman_bin_width(dist, return_bins=True)
+    try:
+        bin_width, bins = freedman_bin_width(dist, return_bins=True)
+    except Exception as e:
+        log.debug('bin width error: %s' % e)
+        raise Exception('util', 'can not get bin width')
+
     minval, maxval = min(dist), max(dist)
     print('min:', minval, ', max:', maxval, ', bin width:', bin_width, ', bins:', bins)
     return bins
