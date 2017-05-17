@@ -180,7 +180,7 @@ class BaseData(object):
 
     def get_col_info(self, col_name):
         log.debug('start')
-        self.get_col_infos();
+        self.get_col_infos()
         return self.column_infos[col_name]
 
     def get_col_values(self, col_name):
@@ -190,7 +190,7 @@ class BaseData(object):
         if self.label_name is not None and self.label_name != '':
             return self.loaded_data[self.label_name]
         else:
-            return None;
+            return None
 
     def preprocess(self):
         log.debug('start')
@@ -238,6 +238,7 @@ class BaseData(object):
         #     self.preprocessed = False
         log.debug('>>>>> start')
 
+        self.desc_data()
         if self.preprocessed == True and force_process == False:
             return
 
@@ -278,6 +279,11 @@ class BaseData(object):
 
         log.debug('##### data name: %s' % self.data_name)
         return
+
+    def desc_data(self):
+        for col_info in self.column_infos:
+            log.debug('column info: {0}'.format(col_info))
+            log.debug('{0}: {1}'.format(col_info[strs.col_name], col_info[strs.col_use_value]))
 
     def process_missing_data(self):
         self.analyze()
