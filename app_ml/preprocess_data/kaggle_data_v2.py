@@ -15,8 +15,30 @@ log.basicConfig(format=strs.log_format,level=log.DEBUG,stream=sys.stderr)
 
 class KaggleData2(BaseData):
     def __init__(self, name):
+        log.debug('start')
         super(KaggleData2, self).__init__(name)
         self.data_file = './data/train.csv'
         self.column_names = ['Pclass', 'Sex', 'Age', 'SibSp', 'Parch', 'Fare', 'Embarked']
         self.column_names = None
+
+    def process_missing_data(self):
         log.debug('start')
+        super(KaggleData2, self).process_missing_data()
+
+        if 'Age' in self.column_names:
+            log.debug("process missing data for Age")
+            self.X.loc[:, 'Age'] = self.X["Age"].fillna(self.X["Age"].median())
+
+        if 'Embarked' in self.column_names:
+            log.debug("process missing data for Embarked")
+            self.X.loc[:, 'Embarked'] = self.X['Embarked'].fillna('S')
+
+        if 'Fare' in self.column_names and 'Pclass' in self.column_names:
+            log.debug("process missing data for Fare")
+            # nullfares = X[X.Fare == 0]
+            nullfares = self.X[(self.X.Fare == 0) | (self.X.Fare.isnull())]
+            log.debug('len of nullfares:{0}'.format(nullfares))
+            for index in nullfares.index:
+                clsFare = self.X[self.X.Pclass == self.X.loc[index, 'Pclass']][self.X.Fare != 0].Fare.mean()
+                # log.debug("Pclass: %s, Fare: %f" % (X.loc[index, 'Pclass'], clsFare))
+                self.X.loc[index, 'Fare'] = clsFare

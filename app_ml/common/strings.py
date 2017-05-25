@@ -54,6 +54,7 @@ error_column_name_not_specified = 'ERROR: 데이터 분석을 위한 컬럼이�
 
 # code config
 log_format = '>>>>>> %(filename)s:%(lineno)d:%(funcName)s:\t%(message)s'
+log_format2 = '\t%(filename)s:%(lineno)d:%(funcName)s:\t%(message)s'
 
 # Preprocess pane strings
 preprocess_central_col_sect_title = 'Columns Information'
@@ -87,6 +88,3 @@ col_recommend_preprocess = 'recommend_prepress'
 
 # info
 info_parameters_default = 'defaults'
-
-# filename
-file_name_config = './data/config'

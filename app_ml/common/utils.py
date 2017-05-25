@@ -7,6 +7,8 @@ from matplotlib.colors import ListedColormap
 import common.strings as strs
 import matplotlib.pyplot as plt
 import numpy as np
+import csv
+import six.moves
 
 log.basicConfig(format=strs.log_format, level=log.DEBUG, stream=sys.stderr)
 
@@ -245,6 +247,20 @@ def plot_decision_regions(X, y, classifier,
         plt.scatter(X_test[:, 0], X_test[:, 1], c='',
                     alpha=1.0, linewidth=1, marker='o',
                     s=55, label='test set')
+
+
+def save_dict_csv(path, info):
+    log.debug('start')
+
+    with open(path, 'wt') as f:
+        writer = csv.writer(f, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+        first_info = six.next(six.itervalues(info))
+        for k, v in first_info.items():
+            print(k)
+            print('\t{0}'.format(v))
+        writer.writerow(first_info.keys())
+        for key, item in info.items():
+            writer.writerow([v for k, v in item.items()])
 
 
 class _KnuthF(object):

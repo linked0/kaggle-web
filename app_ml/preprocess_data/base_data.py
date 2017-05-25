@@ -5,8 +5,12 @@ import logging as log
 import common.strings as strs
 import numpy as np
 import common.config as const
+from common import utils
+from common import config
 import pandas as pd
 from six.moves import cPickle as pickle
+from collections import OrderedDict
+import csv
 
 log.basicConfig(format=strs.log_format,level=log.DEBUG,stream=sys.stderr)
 np.set_printoptions(linewidth=1000)
@@ -48,7 +52,7 @@ class BaseData(object):
         self.preprocessed = False
         self.cur_dimen_reduct_method = const.param_none
         self.cur_state = State.Init
-        self.column_infos = {}
+        self.column_infos = OrderedDict()
 
         self.load_config()
 
@@ -109,10 +113,13 @@ class BaseData(object):
 
         for col in self.column_names:
             self.column_infos.setdefault(col, None)
-            self.column_infos[col] = self._analyze_column(col);
+            self.column_infos[col] = self._analyze_column(col)
+
+        utils.save_dict_csv(config.file_name_column_info, self.column_infos)
 
     def _analyze_column(self, col):
-        info = {strs.col_name: col}
+        info = OrderedDict()
+        info[strs.col_name] = col
         col_data = self.loaded_data[col]
 
         BaseData.set_col_data_info(info, strs.col_use_value, True, True)
@@ -121,7 +128,7 @@ class BaseData(object):
         na_sum = col_data.isnull().sum()
         na_indices = self.loaded_data.index[col_data.isnull()]
         BaseData.set_col_data_info(info, strs.col_missing_count, na_sum, 0)
-        BaseData.set_col_data_info(info, strs.col_missing_indices, na_indices, None)
+        BaseData.set_col_data_info(info, strs.col_missing_indices, na_indices.values, None)
 
         log.debug('%s(%d): %d' % (col, len(self.loaded_data.index), na_sum))
         # log.debug('----- %s:%s' % (col, na_indices))
@@ -129,10 +136,10 @@ class BaseData(object):
         # 데이터가 0인 개수
         zero_sum = 0
         if col_data.dtype == np.int:
-            zero_sum = self.loaded_data[col_data == 0].count()
+            zero_sum = col_data[col_data == 0].count()
             BaseData.set_col_data_info(info, strs.col_data_type, 'Integer', '')
         elif col_data.dtype == np.float or col_data.dtype == np.double:
-            zero_sum = self.loaded_data[col_data == 0.0].count()
+            zero_sum = col_data[col_data == 0.0].count()
             BaseData.set_col_data_info(info, strs.col_data_type, 'Double', '')
         else:
             zero_sum = 0
@@ -140,7 +147,7 @@ class BaseData(object):
         BaseData.set_col_data_info(info, strs.col_zero_sum, zero_sum, 0)
         BaseData.set_col_data_info(info, strs.col_recommend_preprocess, '', '')
 
-        log.debug(BaseData.print_col_info(info))
+        # log.debug(BaseData.print_col_info(info))
         return info
 
     @staticmethod
@@ -196,7 +203,7 @@ class BaseData(object):
         log.debug('start')
 
     def get_config_file_name(self):
-        file_name = strs.file_name_config + '_' + self.data_name + '.txt'
+        file_name = config.file_name_config + '_' + self.data_name + '.txt'
         log.debug(file_name)
         return file_name
 
@@ -247,6 +254,7 @@ class BaseData(object):
             log.debug(strs.error_no_label_value)
             return
 
+        # dataset, label 구분
         self.y = self.loaded_data[self.label_name]
         self.X = self.loaded_data.ix[:, self.loaded_data.columns != self.label_name]
         log.debug("X dataset:{}".format(self.X.columns))
@@ -286,25 +294,8 @@ class BaseData(object):
             log.debug('{0}: {1}'.format(col_info[strs.col_name], col_info[strs.col_use_value]))
 
     def process_missing_data(self):
+        log.debug('start')
         self.analyze()
-
-        if 'Age' in self.column_names:
-            log.debug("process missing data for Age")
-            self.X.loc[:, 'Age'] = self.X["Age"].fillna(self.X["Age"].median())
-
-        if 'Embarked' in self.column_names:
-            log.debug("process missing data for Embarked")
-            self.X.loc[:, 'Embarked'] = self.X['Embarked'].fillna('S')
-
-        if 'Fare' in self.column_names and 'Pclass' in self.column_names:
-            log.debug("process missing data for Fare")
-            # nullfares = X[X.Fare == 0]
-            nullfares = self.X[(self.X.Fare == 0) | (self.X.Fare.isnull())]
-            log.debug('len of nullfares:{0}'.format(nullfares))
-            for index in nullfares.index:
-                clsFare = self.X[self.X.Pclass == self.X.loc[index, 'Pclass']][self.X.Fare != 0].Fare.mean()
-                # log.debug("Pclass: %s, Fare: %f" % (X.loc[index, 'Pclass'], clsFare))
-                self.X.loc[index, 'Fare'] = clsFare
 
     ###########################################################################
     # hj-deprecated

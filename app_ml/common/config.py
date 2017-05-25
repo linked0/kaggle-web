@@ -34,3 +34,7 @@ accuracy_y_bottom = 0.65
 # Test config
 load_features = None
 load_data_count = -1
+
+# filename
+file_name_config = './data/config'
+file_name_column_info = './data/column_infos.csv'

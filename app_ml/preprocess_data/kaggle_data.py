@@ -110,6 +110,7 @@ class KaggleData(BaseData):
         return X_temp
 
     def process_missing_data(self, X):
+        log.debug('start')
         self.check_missing_data(X)
 
         if 'Age' in self.column_names:
