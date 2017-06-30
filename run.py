@@ -89,6 +89,3 @@ def ml_sample_nested():
 @app.route('/ml/samples/plugins')
 def ml_sample_plugins():
     return render_template('ml/samples/plugins.html')
-
-if __name__ == '__main__':
-    app.run(debug=True)
