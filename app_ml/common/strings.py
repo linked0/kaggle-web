@@ -8,6 +8,8 @@ central_preprocess_title = '프리프로세싱'
 central_train_title = '모델 학습'
 central_test_title = 'Test'
 central_web_title = 'Web Browser'
+central_mlb_title = 'Sabermetrics'
+
 start = 'Train'
 predict = 'Predict'
 use_gridsearch = 'User Grid Search'

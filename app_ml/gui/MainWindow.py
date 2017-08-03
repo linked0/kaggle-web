@@ -16,6 +16,8 @@ from gui.WebBrowserCentral import WebBrowserCentral
 import common.control_view
 import common.strings as strs
 from gui.TrainCentral import CentralWidgetTrainProcess
+import examples.mlb.MlbEx
+
 from preprocess_data import preprocess as prep
 
 log.basicConfig(format=strs.log_format,level=log.DEBUG,stream=sys.stderr)
@@ -49,8 +51,13 @@ class MainWindow(QMainWindow):
         self.testCentral = TestCentral()
         self.tabwidget.addTab(self.testCentral, strs.central_test_title)
 
+        # set for MLB example
+        self.mlb_ex = MlbEx()
+        self.tabwidget.addTab(self.self.mlb_ex, strs.central_mlb_title)
+
         self.tabwidget.currentChanged.connect(self.on_tab_changed)
         layout.addWidget(self.tabwidget)
+
 
         # set for DocWidget of selecting menu or algorithms
         self.train_selectionView = TrainSettingView()
