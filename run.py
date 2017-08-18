@@ -1,3 +1,4 @@
+#-*-coding: utf-8 -*-
 from flask import Flask, render_template, request
 from wtforms import Form, TextAreaField, validators
 from six.moves import cPickle as pickle
@@ -89,3 +90,10 @@ def ml_sample_nested():
 @app.route('/ml/samples/plugins')
 def ml_sample_plugins():
     return render_template('ml/samples/plugins.html')
+
+@app.route('/next/cellplan')
+def cellplan():
+    return render_template('next/cellplan/map.html')
+
+if __name__ == '__main__':
+    app.run(debug=True)
