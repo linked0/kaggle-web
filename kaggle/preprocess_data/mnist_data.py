@@ -3,7 +3,7 @@ import logging as log
 import pandas as pd
 import numpy as np
 import common.strings as strs
-from base_data import BaseData
+from preprocess_data.base_data import BaseData
 from six.moves import cPickle as pickle
 
 log.basicConfig(format=strs.log_format,level=log.DEBUG,stream=sys.stderr)

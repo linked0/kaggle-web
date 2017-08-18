@@ -6,7 +6,7 @@ import logging as log
 import common.strings as strs
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.preprocessing import StandardScaler
-from base_data import BaseData
+from preprocess_data.base_data import BaseData
 
 log.basicConfig(format=strs.log_format,level=log.DEBUG,stream=sys.stderr)
 
