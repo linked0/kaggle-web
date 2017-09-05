@@ -80,7 +80,7 @@ class TrainConfigHyperparamLayout(QWidget):
         self.clearLayout()
         reset_sel_param()
         self.ordered_hyperparams = OrderedDict(hyperparams)
-        for param_name, param_range in self.ordered_hyperparams.iteritems():
+        for param_name, param_range in self.ordered_hyperparams.items():
             param_value = hyperparam_values.get(param_name)
             param_view = TrainConfigHyperparamView(self, param_name, param_range, param_value)
             print('parameter - %s - %s' % (param_name, param_view))

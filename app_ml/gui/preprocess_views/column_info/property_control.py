@@ -9,6 +9,7 @@ import common.strings as strs
 from common import config
 import numpy as np
 from common.utils_ui import *
+from preprocess_data import preprocess as prep
 
 log.basicConfig(format=strs.log_format, level=log.DEBUG, stream=sys.stderr)
 
@@ -18,6 +19,7 @@ class PropertyControl(QWidget):
         super(PropertyControl, self).__init__(parent)
 
         log.debug('col info: %s' % col_info)
+        self.col_info = col_info
         self.col_name = col_info[strs.col_name]
         self.ctrl_view = ctrl_view
         self.parent = parent
@@ -62,6 +64,8 @@ class PropertyControl(QWidget):
 
     def on_clicked_use_check(self):
         log.debug('start')
+        self.col_info[strs.col_use_value] = self.use_check.isChecked()
+        prep.save_data_store_config()
         pass
 
     def setLabelColumn(self):

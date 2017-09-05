@@ -115,7 +115,8 @@ class BaseData(object):
             self.column_infos.setdefault(col, None)
             self.column_infos[col] = self._analyze_column(col)
 
-        utils.save_dict_csv(config.file_name_column_info, self.column_infos)
+        # utils.save_dict_csv(config.file_name_column_info, self.column_infos)
+        self.save_config()
 
     def _analyze_column(self, col):
         info = OrderedDict()
@@ -203,17 +204,18 @@ class BaseData(object):
         log.debug('start')
 
     def get_config_file_name(self):
-        file_name = config.file_name_config + '_' + self.data_name + '.txt'
+        file_name = config.file_name_config + '_' + self.data_name + '.pkl'
         log.debug(file_name)
         return file_name
 
     def load_config(self):
         log.debug('start')
         try:
-            with open(self.get_config_file_name()) as f:
+            with open(self.get_config_file_name(), 'rb') as f:
                 config = pickle.load(f)
                 self.data_name = config['data_name']
                 self.label_name = config['label_name']
+                self.column_infos = config['column_infos']
                 log.debug(self.label_name)
         except Exception as e:
             log.debug('Unable to read data from {0}:{1}'.format(self.get_config_file_name(), e))
@@ -227,6 +229,7 @@ class BaseData(object):
                 config = {
                     'data_name': self.data_name,
                     'label_name': self.label_name,
+                    'column_infos': self.column_infos,
                 }
                 pickle.dump(config, f, pickle.HIGHEST_PROTOCOL)
         except Exception as e:

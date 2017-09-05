@@ -75,7 +75,10 @@ class CentralChart(QWidget):
 
         col_info = prep.get_col_info(self.col_name)
         self.missing_cnts_input.setText(str(col_info[strs.col_missing_count]))
-        self.value_set_input.setText(str(np.unique(self.col_values)))
+        try:
+            self.value_set_input.setText(str(np.unique(self.col_values)))
+        except Exception as e:
+            self.value_set_input.setText("Exeception in np.unique in show_desc_info")
         self.value_type_input.setText(col_info[strs.col_data_type])
 
 

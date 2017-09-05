@@ -97,6 +97,10 @@ def set_data_label(label):
 def get_label_name():
     return data_store.get_label_name()
 
+def save_data_store_config():
+    log.debug('start')
+    data_store.save_config()
+
 ###########################################################################
 # hj-deprecated
 ###########################################################################

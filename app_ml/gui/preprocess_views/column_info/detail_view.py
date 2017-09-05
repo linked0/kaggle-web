@@ -1,11 +1,15 @@
 # -*- coding: utf-8 -*-
 
+import logging as log
+
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
 from common.utils import *
 from common.utils_ui import *
 from gui.preprocess_views.column_info.dist_chart import CentralChart
 from preprocess_data import preprocess as prep
+from common import strings as strs
+
 
 log.basicConfig(format=strs.log_format, level=log.DEBUG, stream=sys.stderr)
 
@@ -101,6 +105,7 @@ class DetailView(QWidget):
     # 각 레이블별 컬럼값을 구분하여 보여주기
     def show_chart_plot(self, col_name):
         log.debug('>>>>>> start')
+        log.debug('col name: %s', col_name)
         self.load_col_values(col_name)
         col_map = np.unique(self.col_values)
         if len(col_map) <= 10:

@@ -37,4 +37,4 @@ load_data_count = -1
 
 # filename
 file_name_config = './data/config'
-file_name_column_info = './data/column_infos.csv'
+# file_name_column_info = './data/column_infos.csv'

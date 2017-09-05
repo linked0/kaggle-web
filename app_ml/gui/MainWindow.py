@@ -16,7 +16,7 @@ from gui.WebBrowserCentral import WebBrowserCentral
 import common.control_view
 import common.strings as strs
 from gui.TrainCentral import CentralWidgetTrainProcess
-import examples.mlb.MlbEx
+from examples.mlb import MlbEx
 
 from preprocess_data import preprocess as prep
 
@@ -52,8 +52,8 @@ class MainWindow(QMainWindow):
         self.tabwidget.addTab(self.testCentral, strs.central_test_title)
 
         # set for MLB example
-        self.mlb_ex = MlbEx()
-        self.tabwidget.addTab(self.self.mlb_ex, strs.central_mlb_title)
+        # self.mlb_ex = MlbEx()
+        # self.tabwidget.addTab(self.self.mlb_ex, strs.central_mlb_title)
 
         self.tabwidget.currentChanged.connect(self.on_tab_changed)
         layout.addWidget(self.tabwidget)
