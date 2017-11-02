@@ -20,6 +20,7 @@ class AlgNeuralNet(AlgBase):
         log.debug('Neural Network powered by Tensorflow')
 
     def show_learning_curve(self, fig, ax, best_params):
+        log.debug('start')
         prep.preprocess_data()
         batch_size = prep.data_store.get_batch_size()
         num_features = prep.data_store.get_x_field_count()

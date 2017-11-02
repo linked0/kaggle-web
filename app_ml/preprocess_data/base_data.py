@@ -300,9 +300,28 @@ class BaseData(object):
         log.debug('start')
         self.analyze()
 
-    ###########################################################################
-    # hj-deprecated
-    ###########################################################################
+        self.check_missing_data()
+
+        if 'Age' in self.column_names:
+            log.debug("process missing data for Age")
+            self.X.loc[:, 'Age'] = self.X["Age"].fillna(self.X["Age"].median())
+
+        if 'Embarked' in self.column_names:
+            log.debug("process missing data for Embarked")
+            self.X.loc[:, 'Embarked'] = self.X['Embarked'].fillna('S')
+
+        if 'Fare' in self.column_names and 'Pclass' in self.column_names:
+            log.debug("process missing data for Fare")
+            # nullfares = X[X.Fare == 0]
+            nullfares = self.X[(self.X.Fare == 0) | (self.X.Fare.isnull())]
+            log.debug('len of nullfares:{0}'.format(nullfares))
+            for index in nullfares.index:
+                clsFare = self.X[self.X.Pclass == self.X.loc[index, 'Pclass']][self.X.Fare != 0].Fare.mean()
+                # log.debug("Pclass: %s, Fare: %f" % (X.loc[index, 'Pclass'], clsFare))
+                self.X.loc[index, 'Fare'] = clsFare
+
+        self.check_missing_data()
+
     def check_missing_data(self):
         for col in self.X.columns:
             dtype = self.X[col].dtype
@@ -314,6 +333,11 @@ class BaseData(object):
                               (col, self.X[col].isnull().sum(), self.X[self.X[col] == 0.0][col].count()))
             else:
                 log.debug("%s(object): # of null: %d" % (col, self.X[col].isnull().sum()))
+
+    ###########################################################################
+    # hj-deprecated
+    ###########################################################################
+
 
     def split_data(self):
         log.debug('not implemented')
