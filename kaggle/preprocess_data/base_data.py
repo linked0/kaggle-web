@@ -8,10 +8,11 @@ import pandas as pd
 log.basicConfig(format=strs.log_format,level=log.DEBUG,stream=sys.stderr)
 np.set_printoptions(linewidth=1000)
 
-
 class BaseData(object):
     def __init__(self):
         log.debug('start')
+
+    def init(self):
         self.data_name = None
         self.data_file = None
         self.train_data_columns = None
@@ -29,20 +30,7 @@ class BaseData(object):
         self.preprocessed = False
         self.cur_dimen_reduct_method = const.param_none
 
-    def init(self):
-        self.X = None
-        self.y = None
-        self.org_X = None
-        self.org_y = None
-        self.X_train = None
-        self.y_train = None
-        self.X_valid = None
-        self.y_valid = None
-        self.X_test = None
-        self.y_test = None
-        self.loaded_data = None
-        self.preprocessed = False
-        self.cur_dimen_reduct_method = const.param_none
+        self.preproc_infos = {}
 
     def set_columns(self, columns):
         self.train_data_columns = columns

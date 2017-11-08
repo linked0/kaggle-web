@@ -4,8 +4,8 @@ main_menu_train = 'Train'
 main_menu_example = 'Examples'
 
 
-central_preprocess_title = '프리프로세싱'
-central_train_title = '모델 학습'
+central_preprocess_title = 'Preprocess'
+central_train_title = 'Train'
 central_test_title = 'Test'
 central_web_title = 'Web Browser'
 central_mlb_title = 'Sabermetrics'

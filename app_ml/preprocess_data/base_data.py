@@ -11,6 +11,7 @@ import pandas as pd
 from six.moves import cPickle as pickle
 from collections import OrderedDict
 import csv
+from sklearn.cross_validation import train_test_split
 
 log.basicConfig(format=strs.log_format,level=log.DEBUG,stream=sys.stderr)
 np.set_printoptions(linewidth=1000)
@@ -264,37 +265,40 @@ class BaseData(object):
 
         # 프리프로세싱 시작
         self.process_missing_data()
-        # self.merge_data(self.X)
-        # self.convert_data_type(self.X)
-        # self.X = self.convert_to_dummy_data(self.X)  # manipulate categorical data
-        # self.X = self.X.astype(np.float32)
-        # self.y = self.y.astype(np.float32)
-        # self.X_df = self.X
-        # self.X = self.X.values
-        # self.y = self.y.values
-        # # y = one_hot_encode(y)
-        # # self.X = self.standardize_data(self.X)  # standardize
-        # log.debug('>>>>> Processed Data:\n{0}'.format(self.X[:5]))
-        #
-        # # split data into train, validation, test data
-        # self.X_train, self.X_test, self.y_train, self.y_test = \
-        #     train_test_split(self.X, self.y, test_size=0.20, random_state=0)
-        # self.X_train, self.X_valid, self.y_train, self.y_valid = \
-        #     train_test_split(self.X_train, self.y_train, test_size=0.20, random_state=0)
-        #
-        # log.debug('X shape: %s, y shape: %s' % (self.X.shape, self.y.shape))
-        # log.debug('X train shape: %s, y train shape: %s' % (self.X_train.shape, self.y_train.shape))
-        # log.debug('X valid shape: %s, y valid shape: %s' % (self.X_valid.shape, self.y_valid.shape))
-        # log.debug('X test shape: %s, y test shape: %s' % (self.X_test.shape, self.y_test.shape))
-        # self.preprocessed = True
+
+        # 다음의 함수들을 새로운 프로세스에 맞게 수정해야함
+        # self.merge_data(self.X) # hj-next
+        self.convert_data_type(self.X)
+        self.X = self.convert_to_dummy_data(self.X)  # manipulate categorical data
+        self.X = self.X.astype(np.float32)
+        self.y = self.y.astype(np.float32)
+        self.X_df = self.X
+        self.X = self.X.values
+        self.y = self.y.values
+        # y = one_hot_encode(y)
+        # self.X = self.standardize_data(self.X)  # standardize
+        log.debug('>>>>> Processed Data:\n{0}'.format(self.X[:5]))
+
+        # split data into train, validation, test data
+        self.X_train, self.X_test, self.y_train, self.y_test = \
+            train_test_split(self.X, self.y, test_size=0.20, random_state=0)
+        self.X_train, self.X_valid, self.y_train, self.y_valid = \
+            train_test_split(self.X_train, self.y_train, test_size=0.20, random_state=0)
+
+        log.debug('X shape: %s, y shape: %s' % (self.X.shape, self.y.shape))
+        log.debug('X train shape: %s, y train shape: %s' % (self.X_train.shape, self.y_train.shape))
+        log.debug('X valid shape: %s, y valid shape: %s' % (self.X_valid.shape, self.y_valid.shape))
+        log.debug('X test shape: %s, y test shape: %s' % (self.X_test.shape, self.y_test.shape))
+        self.preprocessed = True
 
         log.debug('##### data name: %s' % self.data_name)
         return
 
-    def desc_data(self):
-        for col_info in self.column_infos:
-            log.debug('column info: {0}'.format(col_info))
-            log.debug('{0}: {1}'.format(col_info[strs.col_name], col_info[strs.col_use_value]))
+    def desc_data(self): # hj-next
+        pass
+        # for col_info in self.column_infos:
+        #     log.debug('column info: {0}'.format(col_info))
+        #     log.debug('{0}: {1}'.format(col_info[strs.col_name], col_info[strs.col_use_value]))
 
     def process_missing_data(self):
         log.debug('start')
@@ -333,6 +337,22 @@ class BaseData(object):
                               (col, self.X[col].isnull().sum(), self.X[self.X[col] == 0.0][col].count()))
             else:
                 log.debug("%s(object): # of null: %d" % (col, self.X[col].isnull().sum()))
+
+    def convert_data_type(self, X):
+        if 'Sex' in self.train_data_columns:
+            log.debug("convert Sex data to integer")
+            sex_mapping = {'male': 0, 'female': 1}
+            X.loc[:, 'Sex'] = X['Sex'].map(sex_mapping)
+
+        if 'Pclass' in self.train_data_columns:
+            log.debug('convert Pclass data to str')
+            X.Pclass = X.Pclass.astype(str)
+
+        # if 'Embarked' in train_data_columns:
+        #     log.debug("convert Embarked data to integer")
+        #     # embarked_mapping = {label:idx for idx, label in enumerate(np.unique(X['Embarked']))}
+        #     embarked_mapping = {'S':0, 'C':1, 'Q':2}
+        #     X.loc[:, 'Embarked'] = X['Embarked'].map(embarked_mapping)
 
     ###########################################################################
     # hj-deprecated

@@ -155,9 +155,11 @@ class KaggleData(BaseData):
             sex_mapping = {'male': 0, 'female': 1}
             X.loc[:, 'Sex'] = X['Sex'].map(sex_mapping)
 
+        print('###### convert_data_type - PClass: {0}', X.Pclass)
         if 'Pclass' in self.train_data_columns:
             log.debug('convert Pclass data to str')
             X.Pclass = X.Pclass.astype(str)
+        print('###### convert_data_type - PClass: {0}', X.Pclass)
 
         # if 'Embarked' in train_data_columns:
         #     log.debug("convert Embarked data to integer")
