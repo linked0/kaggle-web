@@ -11,6 +11,7 @@ np.set_printoptions(linewidth=1000)
 class BaseData(object):
     def __init__(self):
         log.debug('start')
+        self.init()
 
     def init(self):
         self.data_name = None
@@ -29,8 +30,6 @@ class BaseData(object):
         self.loaded_data = None
         self.preprocessed = False
         self.cur_dimen_reduct_method = const.param_none
-
-        self.preproc_infos = {}
 
     def set_columns(self, columns):
         self.train_data_columns = columns

@@ -339,20 +339,25 @@ class BaseData(object):
                 log.debug("%s(object): # of null: %d" % (col, self.X[col].isnull().sum()))
 
     def convert_data_type(self, X):
-        if 'Sex' in self.train_data_columns:
-            log.debug("convert Sex data to integer")
-            sex_mapping = {'male': 0, 'female': 1}
-            X.loc[:, 'Sex'] = X['Sex'].map(sex_mapping)
+        for col_info in self.column_infos.items():
+            print('###### convert_data_type col_info: {0}'.format(col_info))
+            if col_info[strs.col_use_value] is True:
+                log.debug("%s is used" % (col_info[strs.col_name]))
 
-        if 'Pclass' in self.train_data_columns:
-            log.debug('convert Pclass data to str')
-            X.Pclass = X.Pclass.astype(str)
+                if 'Sex' in self.train_data_columns:
+                    log.debug("convert Sex data to integer")
+                    sex_mapping = {'male': 0, 'female': 1}
+                    X.loc[:, 'Sex'] = X['Sex'].map(sex_mapping)
 
-        # if 'Embarked' in train_data_columns:
-        #     log.debug("convert Embarked data to integer")
-        #     # embarked_mapping = {label:idx for idx, label in enumerate(np.unique(X['Embarked']))}
-        #     embarked_mapping = {'S':0, 'C':1, 'Q':2}
-        #     X.loc[:, 'Embarked'] = X['Embarked'].map(embarked_mapping)
+                if 'Pclass' in self.train_data_columns:
+                    log.debug('convert Pclass data to str')
+                    X.Pclass = X.Pclass.astype(str)
+
+                # if 'Embarked' in train_data_columns:
+                #     log.debug("convert Embarked data to integer")
+                #     # embarked_mapping = {label:idx for idx, label in enumerate(np.unique(X['Embarked']))}
+                #     embarked_mapping = {'S':0, 'C':1, 'Q':2}
+                #     X.loc[:, 'Embarked'] = X['Embarked'].map(embarked_mapping)
 
     ###########################################################################
     # hj-deprecated
