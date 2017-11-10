@@ -224,9 +224,7 @@ class BaseData(object):
     def save_config(self):
         log.debug('start')
         try:
-            log.debug('saving')
             with open(self.get_config_file_name(), 'wb') as f:
-                log.debug('saving~')
                 config = {
                     'data_name': self.data_name,
                     'label_name': self.label_name,
@@ -339,7 +337,7 @@ class BaseData(object):
                 log.debug("%s(object): # of null: %d" % (col, self.X[col].isnull().sum()))
 
     def convert_data_type(self, X):
-        for col_info in self.column_infos.items():
+        for col_info in self.column_infos.values():
             print('###### convert_data_type col_info: {0}'.format(col_info))
             if col_info[strs.col_use_value] is True:
                 log.debug("%s is used" % (col_info[strs.col_name]))

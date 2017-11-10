@@ -19,6 +19,7 @@ class PropertyControl(QWidget):
         super(PropertyControl, self).__init__(parent)
 
         log.debug('col info: %s' % col_info)
+        log.debug('id of col info({0}): {1}'.format(col_info[strs.col_name], id(col_info)))
         self.col_info = col_info
         self.col_name = col_info[strs.col_name]
         self.ctrl_view = ctrl_view
@@ -65,6 +66,7 @@ class PropertyControl(QWidget):
     def on_clicked_use_check(self):
         log.debug('start')
         self.col_info[strs.col_use_value] = self.use_check.isChecked()
+        print(">>>>>> on_clicked_use_check: config:{0}".format(self.col_info))
         prep.save_data_store_config()
         pass
 

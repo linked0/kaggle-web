@@ -64,7 +64,7 @@ class ColumnsView(QWidget):
             # 컬럼 이름들 보여주기
 
     def showEvent(self, event):
-        log.debug('>>>>>> start')
+        log.debug('start')
 
         if self.col_info_set is True and prep.get_dirty_flag() is False:
             return
@@ -80,6 +80,7 @@ class ColumnsView(QWidget):
                 self.label_sel_combo.addItem(name)
 
                 # add to columns info section
+                log.debug('id of col info({0}): {1}'.format(name, id(info)))
                 prop_view = PropertyControl(info, self.col_group, self.ctrl_view, self)
                 self.cols_view_layout.addWidget(prop_view, row, col)
                 self.cols_view_layout.setRowStretch(row, 0)
