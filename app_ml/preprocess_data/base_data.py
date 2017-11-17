@@ -113,8 +113,9 @@ class BaseData(object):
             return
 
         for col in self.column_names:
-            self.column_infos.setdefault(col, None)
-            self.column_infos[col] = self._analyze_column(col)
+            if self.column_infos[col][strs.col_analyzed] is False:
+                self.column_infos.setdefault(col, None)
+                self.column_infos[col] = self._analyze_column(col)
 
         # utils.save_dict_csv(config.file_name_column_info, self.column_infos)
         self.save_config()
@@ -148,6 +149,7 @@ class BaseData(object):
             BaseData.set_col_data_info(info, strs.col_data_type, 'String', '')
         BaseData.set_col_data_info(info, strs.col_zero_sum, zero_sum, 0)
         BaseData.set_col_data_info(info, strs.col_recommend_preprocess, '', '')
+        BaseData.set_col_data_info(info, strs.col_analyzed, True, False)
 
         # log.debug(BaseData.print_col_info(info))
         return info
@@ -209,6 +211,11 @@ class BaseData(object):
         log.debug(file_name)
         return file_name
 
+    def set_column_config(self, col_info):
+        col_name = col_info[strs.col_name]
+        self.column_infos[col_name] = col_info
+
+
     def load_config(self):
         log.debug('start')
         try:
@@ -217,7 +224,7 @@ class BaseData(object):
                 self.data_name = config['data_name']
                 self.label_name = config['label_name']
                 self.column_infos = config['column_infos']
-                log.debug(self.label_name)
+                log.debug(self.column_infos)
         except Exception as e:
             log.debug('Unable to read data from {0}:{1}'.format(self.get_config_file_name(), e))
 

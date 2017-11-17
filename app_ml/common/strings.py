@@ -87,6 +87,7 @@ col_use_value = 'use_value'
 col_data_type = 'data_type'
 col_zero_sum = 'zero_sum'
 col_recommend_preprocess = 'recommend_prepress'
+col_analyzed = 'analyzed'
 
 # info
 info_parameters_default = 'defaults'

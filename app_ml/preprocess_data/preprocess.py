@@ -47,6 +47,11 @@ def load_data():
     data_store.load_data2()
 
 
+def save_data_store_config():
+    log.debug('start')
+    data_store.save_config()
+
+
 def create_data_store(force_process=False):
     log.debug('start: %s' % data_store_name)
     global data_store, data_store_dict
@@ -70,6 +75,7 @@ def get_col_infos():
         return data_store.get_col_infos()
     else:
         return None
+
 
 def get_col_info(col_name):
     if data_store is not None:
@@ -96,10 +102,6 @@ def set_data_label(label):
 
 def get_label_name():
     return data_store.get_label_name()
-
-def save_data_store_config():
-    log.debug('start')
-    data_store.save_config()
 
 ###########################################################################
 # hj-deprecated
