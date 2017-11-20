@@ -85,9 +85,15 @@ col_missing_count = 'missing_count'
 col_missing_indices = 'missing_indices'
 col_use_value = 'use_value'
 col_data_type = 'data_type'
+col_data_range = 'data_range'
 col_zero_sum = 'zero_sum'
 col_recommend_preprocess = 'recommend_prepress'
 col_analyzed = 'analyzed'
+
+# Column info value define
+col_data_range_none = 0
+col_data_range_small = 1
+col_data_range_big = 2
 
 # info
 info_parameters_default = 'defaults'

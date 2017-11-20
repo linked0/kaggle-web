@@ -113,8 +113,11 @@ class BaseData(object):
             return
 
         for col in self.column_names:
-            if self.column_infos[col][strs.col_analyzed] is False:
-                self.column_infos.setdefault(col, None)
+            # log.debug('{0} - {1}'.format(col, self.loaded_data[col]))
+            colexist = col in self.column_infos.keys()
+            if colexist is False:
+                self.column_infos[col] = self._analyze_column(col)
+            elif self.column_infos[col][strs.col_analyzed] is False:
                 self.column_infos[col] = self._analyze_column(col)
 
         # utils.save_dict_csv(config.file_name_column_info, self.column_infos)
@@ -123,40 +126,53 @@ class BaseData(object):
     def _analyze_column(self, col):
         info = OrderedDict()
         info[strs.col_name] = col
-        col_data = self.loaded_data[col]
+        org_col_data = self.loaded_data[col]
 
-        BaseData.set_col_data_info(info, strs.col_use_value, True, True)
+        # set default values
+        BaseData.set_col_data_info(info, strs.col_use_value, True)
+        BaseData.set_col_data_info(info, strs.col_analyzed, True)
+        BaseData.set_col_data_info(info, strs.col_recommend_preprocess, '')
+
+        # categorical data에 대한 range 세팅
+        try:
+            col_map = np.unique(self.loaded_data[col])
+            if len(col_map) <= 10:
+                log.debug('col_map:%s' % col_map)
+                BaseData.set_col_data_info(info, strs.col_data_range, strs.col_data_range_small)
+            else:
+                log.debug('col_map length:%d' % len(col_map))
+                BaseData.set_col_data_info(info, strs.col_data_range, strs.col_data_range_big)
+        except TypeError:
+            BaseData.set_col_data_info(info, strs.col_data_range, strs.col_data_range_none)
 
         # check missing data
-        na_sum = col_data.isnull().sum()
-        na_indices = self.loaded_data.index[col_data.isnull()]
-        BaseData.set_col_data_info(info, strs.col_missing_count, na_sum, 0)
-        BaseData.set_col_data_info(info, strs.col_missing_indices, na_indices.values, None)
+        na_sum = org_col_data.isnull().sum()
+        na_indices = self.loaded_data.index[org_col_data.isnull()]
+        BaseData.set_col_data_info(info, strs.col_missing_count, na_sum)
+        BaseData.set_col_data_info(info, strs.col_missing_indices, na_indices.values)
 
         log.debug('%s(%d): %d' % (col, len(self.loaded_data.index), na_sum))
         # log.debug('----- %s:%s' % (col, na_indices))
 
         # 데이터가 0인 개수
         zero_sum = 0
-        if col_data.dtype == np.int:
-            zero_sum = col_data[col_data == 0].count()
-            BaseData.set_col_data_info(info, strs.col_data_type, 'Integer', '')
-        elif col_data.dtype == np.float or col_data.dtype == np.double:
-            zero_sum = col_data[col_data == 0.0].count()
-            BaseData.set_col_data_info(info, strs.col_data_type, 'Double', '')
+        if org_col_data.dtype == np.int:
+            zero_sum = org_col_data[org_col_data == 0].count()
+            BaseData.set_col_data_info(info, strs.col_data_type, 'Integer')
+        elif org_col_data.dtype == np.float or org_col_data.dtype == np.double:
+            zero_sum = org_col_data[org_col_data == 0.0].count()
+            BaseData.set_col_data_info(info, strs.col_data_type, 'Double')
         else:
             zero_sum = 0
-            BaseData.set_col_data_info(info, strs.col_data_type, 'String', '')
-        BaseData.set_col_data_info(info, strs.col_zero_sum, zero_sum, 0)
-        BaseData.set_col_data_info(info, strs.col_recommend_preprocess, '', '')
-        BaseData.set_col_data_info(info, strs.col_analyzed, True, False)
+            BaseData.set_col_data_info(info, strs.col_data_type, 'String')
+        BaseData.set_col_data_info(info, strs.col_zero_sum, zero_sum)
 
         # log.debug(BaseData.print_col_info(info))
         return info
 
     @staticmethod
-    def set_col_data_info(info, key, value, default_val):
-        info.setdefault(key, default_val)
+    def set_col_data_info(info, key, value):
+        info.setdefault(key, None)
         info[key] = value
 
     @staticmethod

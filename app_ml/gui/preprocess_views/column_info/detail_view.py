@@ -107,13 +107,23 @@ class DetailView(QWidget):
         log.debug('>>>>>> start')
         log.debug('col name: %s', col_name)
         self.load_col_values(col_name)
-        col_map = np.unique(self.col_values)
-        if len(col_map) <= 10:
-            log.debug('col_map:%s' % col_map)
+        col_info = prep.get_col_info(col_name)
+        if col_info[strs.col_data_range] == strs.col_data_range_small:
+            col_map = np.unique(self.col_values)
+            log.debug('col_map:{0}' % col_map)
             self.analyze_small_range_data(col_map)
-        else:
+        elif col_info[strs.col_data_range] == strs.col_data_range_big:
+            col_map = np.unique(self.col_values)
             log.debug('col_map length:%d' % len(col_map))
             self.analyze_big_range_data(col_map)
+        else:
+            log.debug('col_data_range_none:{0}'.format(strs.col_data_range_none))
+        # if len(col_map) <= 10:
+        #     log.debug('col_map:%s' % col_map)
+        #     self.analyze_small_range_data(col_map)
+        # else:
+        #     log.debug('col_map length:%d' % len(col_map))
+        #     self.analyze_big_range_data(col_map)
 
         self.chart_plot.grid()
         self.fig.canvas.draw()
