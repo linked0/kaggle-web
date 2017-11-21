@@ -12,6 +12,8 @@ from six.moves import cPickle as pickle
 from collections import OrderedDict
 import csv
 from sklearn.cross_validation import train_test_split
+from sklearn.preprocessing import OneHotEncoder
+from sklearn.preprocessing import LabelBinarizer
 
 log.basicConfig(format=strs.log_format,level=log.DEBUG,stream=sys.stderr)
 np.set_printoptions(linewidth=1000)
@@ -158,13 +160,13 @@ class BaseData(object):
         zero_sum = 0
         if org_col_data.dtype == np.int:
             zero_sum = org_col_data[org_col_data == 0].count()
-            BaseData.set_col_data_info(info, strs.col_data_type, 'Integer')
+            BaseData.set_col_data_info(info, strs.col_data_type, strs.col_data_type_int)
         elif org_col_data.dtype == np.float or org_col_data.dtype == np.double:
             zero_sum = org_col_data[org_col_data == 0.0].count()
-            BaseData.set_col_data_info(info, strs.col_data_type, 'Double')
+            BaseData.set_col_data_info(info, strs.col_data_type, strs.col_data_type_double)
         else:
             zero_sum = 0
-            BaseData.set_col_data_info(info, strs.col_data_type, 'String')
+            BaseData.set_col_data_info(info, strs.col_data_type, strs.col_data_type_str)
         BaseData.set_col_data_info(info, strs.col_zero_sum, zero_sum)
 
         # log.debug(BaseData.print_col_info(info))
@@ -289,8 +291,8 @@ class BaseData(object):
 
         # 다음의 함수들을 새로운 프로세스에 맞게 수정해야함
         # self.merge_data(self.X) # hj-next
-        self.convert_data_type(self.X)
-        self.X = self.convert_to_dummy_data(self.X)  # manipulate categorical data
+        self.convert_categorical_data(self.X) # manipulate categorical data, convert_data_type
+        # self.X = self.convert_to_dummy_data(self.X)
         self.X = self.X.astype(np.float32)
         self.y = self.y.astype(np.float32)
         self.X_df = self.X
@@ -359,26 +361,28 @@ class BaseData(object):
             else:
                 log.debug("%s(object): # of null: %d" % (col, self.X[col].isnull().sum()))
 
-    def convert_data_type(self, X):
+    def convert_categorical_data(self, X):
         for col_info in self.column_infos.values():
-            print('###### convert_data_type col_info: {0}'.format(col_info))
+            log.debug('col_info: {0}'.format(col_info[strs.col_name]))
             if col_info[strs.col_use_value] is True:
-                log.debug("%s is used" % (col_info[strs.col_name]))
+                log.debug("col_data_range: {0}".format(col_info[strs.col_data_range]))
 
-                if 'Sex' in self.train_data_columns:
-                    log.debug("convert Sex data to integer")
-                    sex_mapping = {'male': 0, 'female': 1}
-                    X.loc[:, 'Sex'] = X['Sex'].map(sex_mapping)
+                if col_info[strs.col_name] is 'Sex':
+                    log.debug("convert Sex data through LabelBinarizer")
+                    encoder = LabelBinarizer()
+                    X.loc[:, 'Sex'] = encoder.fit_transform(X['Sex'])
 
-                if 'Pclass' in self.train_data_columns:
-                    log.debug('convert Pclass data to str')
-                    X.Pclass = X.Pclass.astype(str)
+                if col_info[strs.col_name] is  'Pclass':
+                    log.debug('convert Pclass data through OneHotEncoder')
+                    encoder = OneHotEncoder()
+                    X.Pclass = encoder.fit_transform(X.Pclass)
 
                 # if 'Embarked' in train_data_columns:
                 #     log.debug("convert Embarked data to integer")
                 #     # embarked_mapping = {label:idx for idx, label in enumerate(np.unique(X['Embarked']))}
                 #     embarked_mapping = {'S':0, 'C':1, 'Q':2}
                 #     X.loc[:, 'Embarked'] = X['Embarked'].map(embarked_mapping)
+
 
     ###########################################################################
     # hj-deprecated

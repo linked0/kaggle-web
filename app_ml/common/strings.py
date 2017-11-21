@@ -90,10 +90,15 @@ col_zero_sum = 'zero_sum'
 col_recommend_preprocess = 'recommend_prepress'
 col_analyzed = 'analyzed'
 
-# Column info value define
+# data_range values
 col_data_range_none = 0
 col_data_range_small = 1
 col_data_range_big = 2
+
+# data_type values
+col_data_type_int = 0
+col_data_type_double = 1
+col_data_type_str = 2
 
 # info
 info_parameters_default = 'defaults'
