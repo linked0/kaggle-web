@@ -293,6 +293,11 @@ class BaseData(object):
         # self.merge_data(self.X) # hj-next
         self.convert_categorical_data(self.X) # manipulate categorical data, convert_data_type
         # self.X = self.convert_to_dummy_data(self.X)
+        log.debug('X first row: {0}'.format(self.X.iloc[0]))
+        used_columns = [col[strs.col_name] for col in self.column_infos.values() if col[strs.col_use_value] is True]
+        log.debug('Used Colunms: {0}'.format(used_columns))
+        self.X = self.X[used_columns]
+        log.debug('X used for first row: {0}'.format(self.X.iloc[0]))
         self.X = self.X.astype(np.float32)
         self.y = self.y.astype(np.float32)
         self.X_df = self.X
@@ -363,21 +368,19 @@ class BaseData(object):
 
     def convert_categorical_data(self, X):
         for col_info in self.column_infos.values():
-            log.debug('col_info: {0}'.format(col_info[strs.col_name]))
-            if col_info[strs.col_use_value] is True:
+            log.debug('col name: ({0})'.format(col_info[strs.col_name]))
+            if col_info[strs.col_use_value]:
                 log.debug("col_data_range: {0}".format(col_info[strs.col_data_range]))
-
-                if col_info[strs.col_name] is 'Sex':
+                if col_info[strs.col_name] == 'Sex':
                     log.debug("convert Sex data through LabelBinarizer")
                     encoder = LabelBinarizer()
                     X.loc[:, 'Sex'] = encoder.fit_transform(X['Sex'])
-
-                if col_info[strs.col_name] is  'Pclass':
+                elif col_info[strs.col_name] == 'Pclass':
                     log.debug('convert Pclass data through OneHotEncoder')
                     encoder = OneHotEncoder()
                     X.Pclass = encoder.fit_transform(X.Pclass)
 
-                # if 'Embarked' in train_data_columns:
+                # elif 'Embarked' in train_data_columns:
                 #     log.debug("convert Embarked data to integer")
                 #     # embarked_mapping = {label:idx for idx, label in enumerate(np.unique(X['Embarked']))}
                 #     embarked_mapping = {'S':0, 'C':1, 'Q':2}
