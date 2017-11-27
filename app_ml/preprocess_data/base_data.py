@@ -11,7 +11,7 @@ import pandas as pd
 from six.moves import cPickle as pickle
 from collections import OrderedDict
 import csv
-from sklearn.cross_validation import train_test_split
+from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.preprocessing import LabelBinarizer
 
@@ -336,11 +336,14 @@ class BaseData(object):
 
         if 'Age' in self.column_names:
             log.debug("process missing data for Age")
-            self.X.loc[:, 'Age'] = self.X["Age"].fillna(self.X["Age"].median())
+            # self.X.loc[:, 'Age'] = self.X["Age"].fillna(self.X["Age"].median())
+            age_medain = self.X["Age"].median()
+            self.X["Age"].fillna(age_medain, inplace=True)
 
         if 'Embarked' in self.column_names:
             log.debug("process missing data for Embarked")
-            self.X.loc[:, 'Embarked'] = self.X['Embarked'].fillna('S')
+            # self.X.loc[:, 'Embarked'] = self.X['Embarked'].fillna('S')
+            self.X['Embarked'].fillna('S', inplace=True)
 
         if 'Fare' in self.column_names and 'Pclass' in self.column_names:
             log.debug("process missing data for Fare")

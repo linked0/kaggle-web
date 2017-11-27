@@ -58,7 +58,7 @@ def test():
     y = le.fit_transform(y)
     le.transform(['M', 'B'])
 
-    from sklearn.cross_validation import train_test_split
+    from sklearn.model_selection import train_test_split
 
     X_train, X_test, y_train, y_test = \
             train_test_split(X, y, test_size=0.20, random_state=1)
@@ -77,7 +77,7 @@ def test():
     # y_pred = pipe_lr.predict(X_test)
 
     # import numpy as np
-    # from sklearn.cross_validation import StratifiedKFold
+    # from sklearn.model_selection import StratifiedKFold
     #
     # kfold = StratifiedKFold(y=y_train,
     #                         n_folds=10,

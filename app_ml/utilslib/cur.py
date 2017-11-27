@@ -8,7 +8,7 @@ import os
 import numpy as np
 import matplotlib.pylab as pl
 from sklearn.neighbors  import KNeighborsClassifier as KNN
-from sklearn.cross_validation import cross_val_score
+from sklearn.model_selection import cross_val_score
 
 g_train = None
 g_test = None

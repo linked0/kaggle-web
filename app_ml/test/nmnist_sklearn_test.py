@@ -6,8 +6,8 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC
 import common.strings as strs
 import preprocess_data.preprocess as prep
-from sklearn.cross_validation import cross_val_score
-from sklearn.cross_validation import train_test_split
+from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import train_test_split
 from sklearn.learning_curve import learning_curve
 
 log.basicConfig(format=strs.log_format,level=log.DEBUG,stream=sys.stderr)

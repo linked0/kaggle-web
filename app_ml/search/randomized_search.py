@@ -2,14 +2,14 @@ import pandas as pd
 import scipy as sp
 import numpy as np
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.cross_validation import KFold
+from sklearn.model_selection import KFold
 from sklearn.preprocessing import StandardScaler
-from sklearn.cross_validation import train_test_split
+from sklearn.model_selection import train_test_split
 import logging, sys
 from sklearn.decomposition import PCA
 from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
-from sklearn.cross_validation import cross_val_score
+from sklearn.model_selection import cross_val_score
 from sklearn.learning_curve import learning_curve
 from sklearn.learning_curve import validation_curve
 import matplotlib.pyplot as plt

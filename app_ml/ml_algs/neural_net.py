@@ -4,7 +4,7 @@ from ml_algs.alg_base import AlgBase
 import tensorflow as tf
 import numpy as np
 import preprocess_data.preprocess as prep
-from sklearn.cross_validation import train_test_split
+from sklearn.model_selection import train_test_split
 import ml_algs.model_data as mdata
 
 log.basicConfig(format="%(filename)s:%(funcName)s:%(message)s",level=log.DEBUG,stream=sys.stderr)
