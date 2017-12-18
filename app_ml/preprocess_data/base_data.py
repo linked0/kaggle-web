@@ -371,9 +371,10 @@ class BaseData(object):
 
     def convert_categorical_data(self, X):
         for col_info in self.column_infos.values():
-            log.debug('col name: ({0})'.format(col_info[strs.col_name]))
+            log.debug('{0}, first row: \n{1}'.format(col_info[strs.col_name], X.iloc[0]))
+            # log.debug('col name: ({0})'.format(col_info[strs.col_name]))
             if col_info[strs.col_use_value]:
-                log.debug("col_data_range: {0}".format(col_info[strs.col_data_range]))
+                log.debug("{0}: col_data_range: {1}".format(col_info[strs.col_name], col_info[strs.col_data_range]))
                 if col_info[strs.col_name] == 'Sex':
                     log.debug("convert Sex data through LabelBinarizer")
                     encoder = LabelBinarizer()
@@ -382,12 +383,11 @@ class BaseData(object):
                     log.debug('convert Pclass data through OneHotEncoder')
                     encoder = OneHotEncoder()
                     X.Pclass = encoder.fit_transform(X.Pclass)
-
-                # elif 'Embarked' in train_data_columns:
-                #     log.debug("convert Embarked data to integer")
-                #     # embarked_mapping = {label:idx for idx, label in enumerate(np.unique(X['Embarked']))}
-                #     embarked_mapping = {'S':0, 'C':1, 'Q':2}
-                #     X.loc[:, 'Embarked'] = X['Embarked'].map(embarked_mapping)
+                elif col_info[strs.col_name] == 'Embarked':
+                    log.debug('convert Embarked data through OneHotEncoder')
+                    embarked_encoded, categories = X.Embarked.factorize()
+                    encoder = OneHotEncoder()
+                    X.Embarked = encoder.fit_transform(embarked_encoded.reshape(-1, 1))
 
 
     ###########################################################################

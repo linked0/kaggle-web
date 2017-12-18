@@ -2,14 +2,14 @@ import logging as log
 import sys
 
 from PyQt5.QtWidgets import *
-from gui.ml_analysis.TrainSettingDimenReduction import TrainSettingDimenReduction
-from gui.ml_analysis.TrainSettingEnsemble import EnsembleSettingView
+from gui.ml_analysis.TrainSubDimenReduction import TrainSettingDimenReduction
+from gui.ml_analysis.TrainSubEnsemble import EnsembleSettingView
 
 import ml_algs.model_data as mdata
 from common import config
 from common import strings as strs
-from gui.ml_analysis import TrainSettingModelSelection as tcv
-from gui.ml_analysis.TrainSettingScore import TrainSettingScoreView
+from gui.ml_analysis import TrainSubModelSelection as tcv
+from gui.ml_analysis.TrainSubScore import TrainSettingScoreView
 from ml_algs import model_data as algs
 from preprocess_data import preprocess as prep
 

@@ -8,14 +8,16 @@ from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from gui.preprocess_views.central_main import PreprocessCentralView
 from gui.preprocess_views.setting_main import PreprocessSettingViewV2
-from gui.TestCentral import TestCentral
-from gui.TestSetting import TestSettingView
-from gui.TrainSetting import TrainSettingView
-from gui.WebBrowserCentral import WebBrowserCentral
+from gui.TestMain import TestCentral
+from gui.TestSub import TestSettingView
+from gui.TrainSub import TrainSettingView
+from gui.WebMain import WebBrowserCentral
+from reinforcement_learning.rl_main import RLMainView
+from reinforcement_learning.rl_sub import RLSubView
 
 import common.control_view
 import common.strings as strs
-from gui.TrainCentral import CentralWidgetTrainProcess
+from gui.TrainMain import CentralWidgetTrainProcess
 from examples.mlb import MlbEx
 
 from preprocess_data import preprocess as prep
@@ -37,11 +39,18 @@ class MainWindow(QMainWindow):
 
         # set for training model
         self.trainProcessView = CentralWidgetTrainProcess()
+        self.train_selectionView = TrainSettingView()
         self.tabwidget.addTab(self.trainProcessView, strs.central_train_title)
 
         # set for preprocessing data
         self.preprocessView = PreprocessCentralView(main_view=self)
+        self.preprocess_settingview = self.preprocessView.get_settingview()
         self.tabwidget.addTab(self.preprocessView, strs.central_preprocess_title)
+
+        # set for reinforcement learning
+        self.rl_mainview = RLMainView()
+        self.rl_subview = RLSubView()
+        self.tabwidget.addTab(self.rl_mainview, strs.central_lr_title)
 
         # set for web browser
         self.webbrowser = WebBrowserCentral()
@@ -49,25 +58,19 @@ class MainWindow(QMainWindow):
 
         # set for examples
         self.testCentral = TestCentral()
+        self.test_settingview = TestSettingView()
         self.tabwidget.addTab(self.testCentral, strs.central_test_title)
 
         # set for MLB example
         # self.mlb_ex = MlbEx()
         # self.tabwidget.addTab(self.self.mlb_ex, strs.central_mlb_title)
 
+
         self.tabwidget.currentChanged.connect(self.on_tab_changed)
         layout.addWidget(self.tabwidget)
 
-
-        # set for DocWidget of selecting menu or algorithms
-        self.train_selectionView = TrainSettingView()
-        self.preprocess_settingview = self.preprocessView.get_settingview()
-        self.test_settingview = TestSettingView()
+        # 디폴트 서브 뷰 세팅
         self.addDockWidget(Qt.RightDockWidgetArea, self.train_selectionView)
-        # self.addDockWidget(Qt.RightDockWidgetArea, self.preprocess_settingview)
-        # self.addDockWidget(Qt.RightDockWidgetArea, self.test_settingview)
-        # self.removeDockWidget(self.preprocess_settingview)
-        # self.removeDockWidget(self.test_settingview)
         self.current_rightdock = self.train_selectionView
 
         self.setCentralWidget(centralwidget)
@@ -94,6 +97,11 @@ class MainWindow(QMainWindow):
         elif p_int == 1:
             self.restoreDockWidget(self.preprocess_settingview)
             self.current_rightdock = self.preprocess_settingview
+        elif p_int == 2:
+            self.restoreDockWidget(self.rl_subview)
+            self.current_rightdock = self.rl_subview
+        elif p_int == 3:
+            pass
         else:
             self.restoreDockWidget(self.test_settingview)
             self.current_rightdock = self.test_settingview

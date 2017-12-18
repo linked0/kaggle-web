@@ -9,6 +9,7 @@ central_train_title = 'Train'
 central_test_title = 'Test'
 central_web_title = 'Web Browser'
 central_mlb_title = 'Sabermetrics'
+central_lr_title = 'RL'
 
 start = 'Train'
 predict = 'Predict'
@@ -85,6 +86,7 @@ col_missing_count = 'missing_count'
 col_missing_indices = 'missing_indices'
 col_use_value = 'use_value'
 col_data_type = 'data_type'
+col_category_value_count = 'category_value_count'
 col_data_range = 'data_range'
 col_zero_sum = 'zero_sum'
 col_recommend_preprocess = 'recommend_prepress'
@@ -96,9 +98,20 @@ col_data_range_small = 1
 col_data_range_big = 2
 
 # data_type values
+col_data_type_unk = -1
 col_data_type_int = 0
 col_data_type_double = 1
 col_data_type_str = 2
+
+def get_data_type_str(dtype):
+    if dtype == col_data_type_int:
+        return 'Integer'
+    elif dtype == col_data_type_double:
+        return 'Double'
+    elif dtype == col_data_type_str:
+        return 'String'
+    else:
+        return 'Unknown'
 
 # info
 info_parameters_default = 'defaults'

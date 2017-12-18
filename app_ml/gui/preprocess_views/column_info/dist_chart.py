@@ -79,6 +79,8 @@ class CentralChart(QWidget):
             self.value_set_input.setText(str(np.unique(self.col_values)))
         except Exception as e:
             self.value_set_input.setText("Exeception in np.unique in show_desc_info")
-        self.value_type_input.setText(col_info[strs.col_data_type])
+
+        log.debug('>>>>>> col data type: {0}'.format(col_info[strs.col_data_type]))
+        self.value_type_input.setText(strs.get_data_type_str(col_info[strs.col_data_type]))
 
 
