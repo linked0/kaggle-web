@@ -291,13 +291,16 @@ class BaseData(object):
 
         # 다음의 함수들을 새로운 프로세스에 맞게 수정해야함
         # self.merge_data(self.X) # hj-next
+        pd.to_pickle(self.X, './used_X1.pkl')
         self.convert_categorical_data(self.X) # manipulate categorical data, convert_data_type
+        pd.to_pickle(self.X, './used_X2.pkl')
         # self.X = self.convert_to_dummy_data(self.X)
-        log.debug('X first row: {0}'.format(self.X.iloc[0]))
+        # log.debug('X first row: {0}'.format(self.X.iloc[0]))
         used_columns = [col[strs.col_name] for col in self.column_infos.values() if col[strs.col_use_value] is True]
         log.debug('Used Colunms: {0}'.format(used_columns))
         self.X = self.X[used_columns]
-        log.debug('X used for first row: {0}'.format(self.X.iloc[0]))
+        pd.to_pickle(self.X, './used_X3.pkl')
+        # log.debug('X used for first row: {0}'.format(self.X.iloc[0]))
         self.X = self.X.astype(np.float32)
         self.y = self.y.astype(np.float32)
         self.X_df = self.X
@@ -352,8 +355,9 @@ class BaseData(object):
             log.debug('len of nullfares:{0}'.format(nullfares))
             for index in nullfares.index:
                 clsFare = self.X[self.X.Pclass == self.X.loc[index, 'Pclass']][self.X.Fare != 0].Fare.mean()
-                # log.debug("Pclass: %s, Fare: %f" % (X.loc[index, 'Pclass'], clsFare))
+                log.debug("Pclass: %s, Fare: %f" % (self.X.loc[index, 'Pclass'], clsFare))
                 self.X.loc[index, 'Fare'] = clsFare
+            log.debug('{0}'.format(self.X.Fare))
 
         self.check_missing_data()
 
@@ -361,17 +365,17 @@ class BaseData(object):
         for col in self.X.columns:
             dtype = self.X[col].dtype
             if dtype == np.int:
-                log.debug("%s(int): # of null: %d, # of zero: %d" %
-                              (col, self.X[col].isnull().sum(), self.X[self.X[col] == 0][col].count()))
+                log.debug("{0}(int): # of null: {1}, # of zero: {2}".format(
+                              col, self.X[col].isnull().sum(), (self.X[col] == 0.0).sum()))
             elif dtype == np.float:
-                log.debug("%s(float): # of null: %d, # of zero: %d" %
-                              (col, self.X[col].isnull().sum(), self.X[self.X[col] == 0.0][col].count()))
+                log.debug("{0}(float): # of null: {1}, # of zero: {2}".format(
+                              col, self.X[col].isnull().sum(), (self.X[col] == 0.0).sum()))
             else:
-                log.debug("%s(object): # of null: %d" % (col, self.X[col].isnull().sum()))
+                log.debug("{0}(object): # of null: {1}".format(col, self.X[col].isnull().sum()))
 
     def convert_categorical_data(self, X):
         for col_info in self.column_infos.values():
-            log.debug('{0}, first row: \n{1}'.format(col_info[strs.col_name], X.iloc[0]))
+            log.debug('{0}, type: {1}'.format(col_info[strs.col_name], col_info[strs.col_data_type]))
             # log.debug('col name: ({0})'.format(col_info[strs.col_name]))
             if col_info[strs.col_use_value]:
                 log.debug("{0}: col_data_range: {1}".format(col_info[strs.col_name], col_info[strs.col_data_range]))
