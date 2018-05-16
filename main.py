@@ -5,12 +5,13 @@ from six.moves import cPickle as pickle
 import sqlite3
 import os
 import numpy as np
+from config import DevConfig
 
 # import HashingVectorizer from local dir
 from vectorizer import vect
 
 app = Flask(__name__) # app = Flask(__name__, template_folder='../pages/templates') 폴더를 다른 곳을 지정할때 참고
-
+app.config.from_object(DevConfig)
 
 ##### Preparing the Classifier
 cur_dir = os.path.dirname(__file__)
