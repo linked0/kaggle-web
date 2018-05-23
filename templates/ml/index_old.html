@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Machine Learning</title>
+{#    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">#}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
+        $(function(){
+            $(".dropdown-menu li a").click(function(){
+              $(".btn:first-child").text($(this).text());
+              $(".btn:first-child").val($(this).text());
+           });
+        });
+    </script>
+
+</head>
+
+<body>
+<div class="container">
+    <a href="/ml/samples/offset"><span class="text-danger">Examples</span></a><br>
+    <a href="/ml/samples/plugins">Plugins</a><br>
+</div>
+
+<div class="container">
+    <div class="page-header">
+        <h1><span class="glyphicon glyphicon-search" aria-hidden="true"></span>ML
+            <small><span class="glyphicon glyphicon-heart text-danger" aria-hidden="true"></span> Training Model and Predict!</small></h1>
+    </div>
+</div>
+
+<div class="dropdown">
+  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Dropdown Example
+  <span class="caret"></span></button>
+  <ul class="dropdown-menu">
+    <li><a href="#">Titanic</a></li>
+    <li><a href="#">MNIST</a></li>
+    <li><a href="#">Dog Breed</a></li>
+  </ul>
+</div>
+
+
+
+
+
+{#<script src="{{url_for('static', filename='js/jquery.js')}}"></script>#}
+{#<script src="{{url_for('static', filename='js/bootstrap.js')}}"></script>#}
+
+</body>
+</html>

@@ -300,7 +300,7 @@ class BaseData(object):
         log.debug('Used Colunms: {0}'.format(used_columns))
         self.X = self.X[used_columns]
         pd.to_pickle(self.X, './used_X3.pkl')
-        # log.debug('X used for first row: {0}'.format(self.X.iloc[0]))
+        log.debug('X used for first row: {0}'.format(self.X.iloc[0]))
         self.X = self.X.astype(np.float32)
         self.y = self.y.astype(np.float32)
         self.X_df = self.X

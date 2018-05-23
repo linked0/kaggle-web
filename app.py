@@ -13,6 +13,9 @@ from vectorizer import vect
 app = Flask(__name__) # app = Flask(__name__, template_folder='../pages/templates') 폴더를 다른 곳을 지정할때 참고
 app.config.from_object(DevConfig)
 
+from flask_bootstrap import Bootstrap
+bootstrap = Bootstrap(app)
+
 ##### Preparing the Classifier
 cur_dir = os.path.dirname(__file__)
 clf = pickle.load(open(os.path.join(cur_dir,
