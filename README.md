@@ -1,4 +1,6 @@
 #### AWS에서 실행시키기 
+- AWS Security Policy 상에서 5000번 포트를 추가해야함.
+
 - conda create -n p36-kaggle python=3.6 anaconda
 
 - conda update -n base conda
@@ -9,9 +11,7 @@
 
 - export FLASK_APP=app.py
 - export FLASK_DEBUG=1
-- flask run -host:52.198.189.243
-- AWS Security Policy 상에서 5000번 포트를 추가해야함.
-- FLASK_DEBUG=1 환경변수를 제거해야하는 것으로 보임. 
+- python app.py
 
 
 
