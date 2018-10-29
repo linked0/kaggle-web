@@ -1,8 +1,10 @@
 #### AWS에서 실행시키기 
 - conda create -n p36-kaggle python=3.6 anaconda
 - conda update -n base conda
-- conda install Flaks-WTF (conda나 pip나 상관없을 것으로 보임)
+- pip install --upgrade pip
+- conda install Flaks-WTF (pip 보다는 conda가 잘 설치됨)
 - conda install flask 
+- pip install flask-bootstrap (이건 conda로 설치 안됨)
 
 - export FLASK_APP=app.py
 - flask run -host:52.198.189.243
