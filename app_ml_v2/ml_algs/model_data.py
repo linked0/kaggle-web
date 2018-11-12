@@ -487,16 +487,17 @@ def save_train_info_file():
         pickle.dump(save, f, pickle.HIGHEST_PROTOCOL)
         f.close()
     except Exception as e:
-        log.debug('Unable to save data to', train_info_file, ':', e)
+        log.debug('Unable to save data to:{0}, e:{1}' % train_info_file, e)
 
 def load_train_info_file():
     global every_algs_best_train
     try:
+        log.debug('train_info_file:%s' % train_info_file)
         f = open(train_info_file, 'rb')
         save = pickle.load(f)
         every_algs_best_train = save['every_model']
         f.close()
     except Exception as e:
-        log.debug('Unable to load data to', train_info_file, ':', e)
+        log.debug('Unable to load data to')
 
 # hj-comment: to find ratio param of train_test_split
