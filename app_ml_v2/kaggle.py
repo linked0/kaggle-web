@@ -5,6 +5,9 @@ __author__ = 'linked0'
 import logging
 import sys
 
+import matplotlib
+matplotlib.use('Qt5Agg')
+
 from PyQt5.QtWidgets import *
 
 import common.strings as strs
@@ -21,6 +24,8 @@ from ml_algs.log_reg import AlgLogisticRegression
 from ml_algs.neural_net import AlgNeuralNet
 from ml_algs.random_forest import AlgRandomForest
 from ml_algs.svm import AlgSVM
+
+
 
 logging.basicConfig(format=strs.log_format,level=logging.DEBUG,stream=sys.stderr)
 
