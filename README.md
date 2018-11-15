@@ -1,12 +1,14 @@
 # 개요
-#### 실행방법 
+#### 실행방법(181115)
 ssh -i jaylee.pem ubuntu@52.199.223.123
+
+source activate kaggle // python 3.6 anaconda 환경 
 
 export FLASK_APP=app.py
 
 export FLASK_DEBUG=1
 
-flask run
+python app.py
 
 
 # 기타 정리
